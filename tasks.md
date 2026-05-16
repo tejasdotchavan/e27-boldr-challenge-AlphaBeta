@@ -34,10 +34,10 @@
 
 | Status | Task | Owner | Notes |
 |--------|------|-------|-------|
-| 🔴 | Step 1: Email ingestion node | | Extract intent + context from ticket |
-| 🔴 | Step 2: Knowledge Base search node | | Query FAQ, specs, rate cards |
-| 🔴 | Step 3: Draft reply (if answerable) | | Brand voice prompt, queue for approval |
-| 🔴 | Step 4: Flag knowledge gap (if not answerable) | | Route to CS, no hallucination |
+| 🟢 | Step 1: Email ingestion node | | Webhook trigger + OpenAI GPT-4o classifier — built in n8n |
+| 🟡 | Step 2: Knowledge Base search node | | IF node routing done; vector search to be wired once KB is indexed |
+| 🟢 | Step 3: Draft reply (if answerable) | | OpenAI node with brand voice prompt on TRUE branch |
+| 🟢 | Step 4: Flag knowledge gap (if not answerable) | | Edit Fields node on FALSE branch — logs ticket_id, question, buyer_persona, channel, status |
 | 🔴 | Step 5: Auto-draft KB entry | | 1-click approval format |
 | 🔴 | Step 6: Weekly theme clustering | | Group novel questions by theme |
 | 🔴 | Step 7: Monthly marketing brief output | | With buyer persona tags |
@@ -48,13 +48,15 @@
 
 | Status | Task | Owner | Notes |
 |--------|------|-------|-------|
-| 🔴 | Build persona classification logic | | Based on `08_buyer_personas.csv` |
-| 🔴 | Tag: Health-Conscious Buyer | | BPA-free, nickel-free, hypoallergenic |
-| 🔴 | Tag: Gifter | | Engraving, gift wrap, occasions |
-| 🔴 | Tag: Enthusiast / Collector | | Grade 5 titanium, Miyota, limited editions |
-| 🔴 | Tag: Active / Outdoor Buyer | | Water resistance, shock, FKM strap |
-| 🔴 | Tag: Sustainability Advocate | | Vegan straps, eco packaging |
-| 🔴 | Test tagging against `01_customer_tickets.csv` | | Validate accuracy |
+| 🟢 | Build persona classification logic | | `08_buyer_personas.csv` missing — derived 7 personas from `01_customer_tickets.csv` |
+| 🟢 | Tag: health_conscious | | BPA-free, dye safety, nickel-free, titanium grade — built in Step 1b |
+| 🟢 | Tag: gifter | | Engraving, gift wrap, occasions — built in Step 1b |
+| 🟢 | Tag: enthusiast | | Watch specs, movement, strap compatibility, limited editions — built in Step 1b |
+| 🟢 | Tag: niche_buyer | | Magnetic resistance, lume safety, ISO/depth ratings — built in Step 1b |
+| 🟢 | Tag: owner_aftercare | | Servicing, repairs, warranty, older models — built in Step 1b |
+| 🟢 | Tag: prospect | | Price matching, availability, stock — built in Step 1b |
+| 🟢 | Tag: transactional | | Shipping, customs, express delivery — built in Step 1b |
+| 🟢 | Test tagging against live ticket | | Vikram Allen BPA ticket → `health_conscious` (high confidence) ✓ — validated in n8n |
 
 ---
 

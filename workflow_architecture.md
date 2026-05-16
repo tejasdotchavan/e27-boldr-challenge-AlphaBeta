@@ -1,22 +1,36 @@
 # Workflow Architecture · Boldr Intelligence Engine
 **Echelon 2026 · AI Workflow Competition**
-> Authored: May 16, 2026
+> Authored: May 16, 2026 · Last updated: May 16, 2026
 
 ---
 
 ## 1. Automation Platform
 
-**Chosen platform: Make.com (formerly Integromat)**
+**Chosen platform: n8n (self-hosted Cloud via n8n.cloud)**
 
-Make.com is recommended over n8n for this competition for the following reasons:
+**Instance**: `tejasdotchavan.app.n8n.cloud`
 
-- **Visual-first**: The canvas-based builder makes the 7-step loop easy to demonstrate to judges without needing a technical walkthrough
-- **Native integrations**: Has pre-built modules for Gmail, Google Sheets, Shopify, OpenAI, Notion, and Slack — all of which map directly to Boldr's current stack
-- **No self-hosting required**: Runs in the cloud, reducing setup time for a competition context
-- **Webhook support**: Can receive inbound emails forwarded from Gmail and trigger the pipeline instantly
-- **HTTP module**: Any step without a native integration can call an API directly (e.g. OpenAI completions, vector DB search)
+n8n was chosen as the automation platform for the following reasons:
 
-n8n would be preferable in a production setting for cost control and self-hosting, but Make.com is the better choice for a rapid, demonstrable competition build.
+- **Visual-first canvas**: Node-based builder makes the 7-step loop easy to demonstrate to judges without needing a technical walkthrough
+- **Webhook trigger**: Receives inbound customer enquiries instantly via HTTP POST
+- **OpenAI-compatible node**: The built-in OpenAI node supports custom base URLs and credentials, allowing seamless integration with FPT AI Factory's OpenAI-compatible inference API — no custom HTTP node required
+- **Parallel branching**: A single node output can fan out to multiple downstream nodes simultaneously (used for Step 1 → Step 1b parallel execution)
+- **Native integrations**: Supports Google Sheets, Slack, Gmail, Shopify, and Notion — all relevant to Boldr's stack
+- **Free tier available**: Suitable for competition demonstration without production infrastructure costs
+
+### AI Model: Qwen3-32B via FPT AI Factory
+
+All AI inference steps use **Qwen3-32B** served through **FPT AI Factory** (FPT AI Marketplace):
+
+| Setting | Value |
+|---------|-------|
+| Provider | FPT AI Factory (FPT Cloud) |
+| API Base URL | `https://mkp-api.fptcloud.com/v1` |
+| Model ID | `Qwen3-32B` |
+| n8n Credential | "FPT AI Factory (Qwen)" (custom OpenAI credential) |
+
+> **Note on Qwen3-32B output**: The model produces `<think>` tags (chain-of-thought / extended thinking) before its final answer. In production, these should be stripped from responses before presenting to CS agents or customers. For competition demonstration, the full output (including `<think>` blocks) is visible in the n8n execution log.
 
 ---
 
@@ -28,27 +42,31 @@ This is the core of the engine. Each incoming customer enquiry flows through all
 ┌─────────────────────────────────────────────────────────────────┐
 │                    INBOUND TICKET                               │
 │         (email / chat / WhatsApp / Instagram DM)               │
+│         → routed via webhook POST to n8n                       │
 └───────────────────────────┬─────────────────────────────────────┘
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │  STEP 1 — INGESTION & CLASSIFICATION                           │
-│  Extract: intent, question type, buyer persona, order ID?      │
-│  Output: structured ticket object                              │
-└───────────────────────────┬─────────────────────────────────────┘
-                            │
-                            ▼
-┌─────────────────────────────────────────────────────────────────┐
-│  STEP 2 — KNOWLEDGE BASE SEARCH                                │
-│  Query KB with extracted intent                                │
-│  Return: matching KB entries + confidence score                │
-└───────────────────────────┬─────────────────────────────────────┘
-                            │
-               ┌────────────┴────────────┐
-               │                         │
-         KB match found?           No match found
-               │                         │
-               ▼                         ▼
+│  Extract: intent, question type, order ID?                     │
+│  Output: structured ticket object (JSON)                       │
+│  Model: Qwen3-32B via FPT AI Factory                          │
+└───────────────┬─────────────────────────────┬───────────────────┘
+                │                             │ (parallel branch)
+                ▼                             ▼
+┌──────────────────────────┐  ┌──────────────────────────────────┐
+│  STEP 1b — TAG PERSONA   │  │  STEP 2 — KNOWLEDGE BASE SEARCH  │
+│  Classify buyer persona  │  │  Query KB with extracted intent  │
+│  into 1 of 7 types       │  │  Return: KB chunks + confidence  │
+│  Model: Qwen3-32B        │  │  Model: Qwen3-32B                │
+└──────────────────────────┘  └──────────────┬───────────────────┘
+                                             │
+                                ┌────────────┴────────────┐
+                                │                         │
+                          KB match found?           No match found
+                          (confidence ≥ 0.75)       (confidence < 0.75)
+                                │                         │
+                                ▼                         ▼
 ┌──────────────────────────┐  ┌──────────────────────────────────┐
 │  STEP 3 — DRAFT REPLY    │  │  STEP 4 — FLAG KNOWLEDGE GAP     │
 │  Generate reply using    │  │  Log unanswered question to gap  │
@@ -84,8 +102,9 @@ This is the core of the engine. Each incoming customer enquiry flows through all
 ### Step-by-Step Detail
 
 #### Step 1 — Ingestion & Classification
-- **Trigger**: New email arrives in Gmail (or webhook from other channel)
-- **Action**: Forward raw message to OpenAI GPT-4o with the classification prompt (see Section 4)
+- **Trigger**: Webhook POST to n8n (simulates inbound email / chat message)
+- **Action**: Pass raw message to Qwen3-32B with the classification prompt (see Section 4)
+- **Webhook data path**: Message body is accessed at `$('Webhook').item.json.body.message_body` — the n8n Webhook node wraps POST body under a `body` key
 - **Output** (structured JSON):
   ```json
   {
@@ -104,6 +123,32 @@ This is the core of the engine. Each incoming customer enquiry flows through all
   ```
 - **Routing rule**: If `requires_shopify_lookup = true`, skip Steps 2–3 and route directly to human CS queue with Shopify order data pre-fetched
 
+#### Step 1b — Tag Persona (parallel branch from Step 1)
+- **Trigger**: Runs in parallel with Step 2 immediately after Step 1 completes
+- **Action**: Pass customer message to Qwen3-32B with the persona classification prompt
+- **Input expression**: `{{ $('Webhook').item.json.body.message_body }}`
+- **Output** (JSON):
+  ```json
+  {
+    "buyer_persona": "health_conscious",
+    "confidence": "high",
+    "reason": "Customer is asking about BPA content in watch straps — a material safety concern"
+  }
+  ```
+- **7 Persona Types** (derived from `01_customer_tickets.csv` — `08_buyer_personas.csv` was not present in the provided data):
+
+  | Persona | Signal keywords |
+  |---------|----------------|
+  | `health_conscious` | BPA-free, nickel-free, hypoallergenic, dye safety, titanium grade, skin reactions |
+  | `gifter` | Engraving, gift wrapping, personalisation, occasions, sending as a gift |
+  | `enthusiast` | Watch specs, movement type, strap compatibility, limited editions, technical details |
+  | `niche_buyer` | Magnetic resistance, lume safety, ISO ratings, depth ratings, niche certifications |
+  | `owner_aftercare` | Servicing, repairs, water resistance re-testing, warranty, older model support |
+  | `prospect` | Price matching, availability, stock, comparisons, new purchase consideration |
+  | `transactional` | Shipping, customs, delivery times, express options, order logistics |
+
+- **Validated**: Vikram Allen BPA ticket → `health_conscious` (high confidence) ✓ — confirmed in live n8n execution
+
 #### Step 2 — Knowledge Base Search
 - **Method**: Semantic vector search (embedding the customer query, searching against embedded KB chunks)
 - **KB sources queried**: FAQ document, engraving rate card, servicing rate card, product reference (see Section 3 for full KB structure)
@@ -112,7 +157,7 @@ This is the core of the engine. Each incoming customer enquiry flows through all
 
 #### Step 3 — Draft Reply
 - **Trigger**: KB match found with confidence ≥ 0.75
-- **Action**: Pass matched KB chunks + original message to GPT-4o with the reply drafting prompt (see Section 4)
+- **Action**: Pass matched KB chunks + original message to Qwen3-32B with the reply drafting prompt (see Section 4)
 - **Output**: Draft reply in Boldr brand voice, with a pre-filled subject line
 - **Human gate**: Draft is placed in a Google Sheets "Pending Approval" queue. CS agent reviews, edits if needed, clicks Approve → triggers send via Gmail API. Nothing is auto-sent.
 
@@ -124,13 +169,13 @@ This is the core of the engine. Each incoming customer enquiry flows through all
 
 #### Step 5 — Auto-Draft KB Entry
 - **Trigger**: After Step 4 logs a knowledge gap AND the CS agent sends a manual reply
-- **Action**: Once CS marks the ticket as resolved, the engine reads the CS reply and uses GPT-4o to draft a proposed KB entry in the standard format (question + answer + persona tags + source)
+- **Action**: Once CS marks the ticket as resolved, the engine reads the CS reply and uses Qwen3-32B to draft a proposed KB entry in the standard format (question + answer + persona tags + source)
 - **Output**: Proposed KB entry pushed to a "KB Inbox" sheet for 1-click approval by team lead
 - **On approval**: Entry is added to the live KB and its embedding is indexed — the system now knows the answer for next time
 
 #### Step 6 — Weekly Theme Clustering
 - **Trigger**: Scheduled run every Monday at 9am SGT
-- **Action**: Pull all knowledge gap tickets from the past 7 days, pass to GPT-4o with the clustering prompt
+- **Action**: Pull all knowledge gap tickets from the past 7 days, pass to Qwen3-32B with the clustering prompt
 - **Output**: A cluster report listing: theme name, example questions, ticket count, dominant persona, and a "frequency trend" flag (new this week / recurring / escalating)
 - **Delivered to**: CS team lead via email or Slack digest
 
@@ -175,9 +220,9 @@ Last updated: 2026-05-16
 
 ### Storage & Retrieval
 
-- **Storage**: Google Sheets (simple, auditable, easy for CS team to edit without technical skill) + OpenAI embeddings via the Embeddings API
+- **Storage**: Google Sheets (simple, auditable, easy for CS team to edit without technical skill) + OpenAI-compatible embeddings via FPT AI Factory
 - **Indexing**: Each KB entry is embedded on creation/update and stored with its vector in a lightweight vector store (Supabase with pgvector, or Pinecone free tier)
-- **Query flow**: Customer message → embed query → cosine similarity search → return top 3 chunks → pass to GPT-4o for reply drafting
+- **Query flow**: Customer message → embed query → cosine similarity search → return top 3 chunks → pass to Qwen3-32B for reply drafting
 
 ### KB Maintenance Rules
 
@@ -189,7 +234,7 @@ Last updated: 2026-05-16
 
 ## 4. Prompt Templates
 
-Four core prompts power the engine. All use GPT-4o.
+Four core prompts power the engine. All use **Qwen3-32B via FPT AI Factory**.
 
 ---
 
@@ -235,6 +280,27 @@ Your job is to analyse an inbound customer enquiry and extract structured data f
   "requires_shopify_lookup": true/false,
   "summary": "One sentence summary of what the customer is asking"
 }
+```
+
+---
+
+### Prompt 1b — Persona Tagger (Step 1b system prompt, live in n8n)
+
+```
+You are a buyer persona classifier for Boldr Supply Co., a premium titanium watch brand.
+
+Classify the customer message into exactly ONE of these 7 personas based on their primary concern:
+
+- health_conscious: Asks about material safety, BPA-free, nickel-free, hypoallergenic, dye safety, titanium grade, skin reactions
+- gifter: Asks about engraving, gift wrapping, personalisation, occasions, sending as a gift
+- enthusiast: Asks about watch specs, movement type, strap compatibility, limited editions, technical details, wrist size fit
+- niche_buyer: Asks about edge-case technical specs — magnetic resistance, lume safety, ISO ratings, depth ratings, niche certifications
+- owner_aftercare: Asks about servicing, repairs, water resistance re-testing, warranty, older model support
+- prospect: Asks about price matching, availability, stock, comparisons, new purchase consideration
+- transactional: Asks about shipping, customs, delivery times, express options, order logistics
+
+Respond with ONLY a valid JSON object in this exact format, no other text:
+{"buyer_persona": "<persona_label>", "confidence": "<high|medium|low>", "reason": "<one sentence>"}
 ```
 
 ---
@@ -359,4 +425,38 @@ The brief explicitly warns against auto-sending. The gate is not just a safety f
 
 ---
 
-*End of Phase 2 Architecture — last updated May 16, 2026*
+## 6. Current Build Status
+
+> For Ayush and any team members joining Phase 7 — here is what is live vs. pending as of May 16, 2026.
+
+### Live in n8n (built and validated)
+
+| Node | Status | Notes |
+|------|--------|-------|
+| Webhook trigger | ✅ Live | Receives POST, data at `body.message_body` |
+| Step 1: Ingestion & Classification | ✅ Live | Qwen3-32B, outputs structured ticket JSON |
+| Step 1b: Tag Persona | ✅ Live | Parallel branch from Step 1; 7 personas; validated on BPA ticket |
+| Step 3: Draft Reply | ✅ Live | Qwen3-32B, brand voice prompt, TRUE branch |
+| Step 4: Flag Knowledge Gap | ✅ Live | Edit Fields node, logs ticket_id / question / persona / channel / status |
+
+### Pending / Not yet built
+
+| Node | Status | Notes |
+|------|--------|-------|
+| Step 2: KB Search | 🟡 Partial | IF node routing done; vector search not yet wired (KB not indexed) |
+| Step 5: Auto-draft KB Entry | 🔴 Not started | Needs Step 4 completion trigger + CS reply webhook |
+| Step 6: Weekly Theme Clustering | 🔴 Not started | Scheduled trigger, pull gap log, cluster with Qwen3-32B |
+| Step 7: Monthly Marketing Brief | 🔴 Not started | Ayush taking this — see tasks.md Phase 7 |
+
+### Key technical notes for Phase 7 / presentation work
+
+- **n8n instance**: `tejasdotchavan.app.n8n.cloud` — credentials shared separately
+- **AI model**: Qwen3-32B via FPT AI Factory (`https://mkp-api.fptcloud.com/v1`), OpenAI-compatible API
+- **Qwen3-32B quirk**: Model outputs `<think>...</think>` chain-of-thought tags before the final answer. Strip these before showing output in any demo or slide
+- **Persona data**: `08_buyer_personas.csv` was not in the provided Boldr Data folder. All 7 personas were derived from the `buyer_persona` column in `01_customer_tickets.csv`
+- **Missing source files**: `07_knowledge_gap_log.csv`, `08_buyer_personas.csv`, `09_xxx` — noted in `data_observations.md`
+- **Human gate**: Nothing auto-sends. All drafted replies go to a Google Sheets approval queue first
+
+---
+
+*End of Architecture Document — last updated May 16, 2026*

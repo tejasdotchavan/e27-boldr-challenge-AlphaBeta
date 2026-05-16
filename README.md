@@ -1,4 +1,5 @@
 # Boldr · Self-Improving Customer Intelligence Engine
+
 **Echelon 2026 · AI Workflow Competition**
 
 > Turn every customer question into product & marketing intelligence.
@@ -46,13 +47,13 @@ Build an AI workflow that transforms Boldr's reactive customer support into a se
 
 ## Buyer Personas
 
-| Persona | Trigger Signals | Marketing Action |
-|---|---|---|
-| Health-Conscious Buyer | BPA-free, nickel-free, hypoallergenic | "BPA-Free Straps" product badge |
-| Gifter | Engraving, gift wrap, anniversary | Seasonal campaigns |
-| Enthusiast / Collector | Grade 5 titanium, Miyota, limited editions | Collector content |
-| Active / Outdoor Buyer | Water resistance, shock, FKM strap | Adventure lifestyle content |
-| Sustainability Advocate | Vegan straps, carbon offset, eco packaging | Develop vegan strap angle |
+| Persona                 | Trigger Signals                            | Marketing Action                |
+| ----------------------- | ------------------------------------------ | ------------------------------- |
+| Health-Conscious Buyer  | BPA-free, nickel-free, hypoallergenic      | "BPA-Free Straps" product badge |
+| Gifter                  | Engraving, gift wrap, anniversary          | Seasonal campaigns              |
+| Enthusiast / Collector  | Grade 5 titanium, Miyota, limited editions | Collector content               |
+| Active / Outdoor Buyer  | Water resistance, shock, FKM strap         | Adventure lifestyle content     |
+| Sustainability Advocate | Vegan straps, carbon offset, eco packaging | Develop vegan strap angle       |
 
 ---
 
@@ -65,4 +66,4 @@ Cross-validate internal ticket themes against external watch forum and Reddit se
 ## Team
 
 - Tejas Chavan
-- *(add teammate)*
+- Ayush K Pacheriwala
