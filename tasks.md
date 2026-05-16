@@ -64,10 +64,10 @@
 
 | Status | Task | Owner | Notes |
 |--------|------|-------|-------|
-| 🔴 | Produce sample drafted replies | | Show 3–5 examples |
-| 🔴 | Produce knowledge gap log | | Match format of `07_knowledge_gap_log.csv` |
-| 🔴 | Produce weekly theme clustering report | | |
-| 🔴 | Produce monthly marketing brief | | With persona tags + product page gaps |
+| 🟢 | Produce sample drafted replies | | 5 examples — see `phase5_outputs/01_sample_drafted_replies.md` |
+| 🟢 | Produce knowledge gap log | | 14 entries — see `phase5_outputs/02_knowledge_gap_log.md` |
+| 🟢 | Produce weekly theme clustering report | | Week of May 5–11 — see `phase5_outputs/03_weekly_theme_clustering_report.md` |
+| 🟢 | Produce monthly marketing brief | | April 2026 with persona tags + 5 product page gaps — see `phase5_outputs/04_monthly_marketing_brief.md` |
 
 ---
 
