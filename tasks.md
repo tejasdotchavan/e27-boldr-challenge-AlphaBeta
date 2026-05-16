@@ -12,9 +12,9 @@
 | 🟢 | Read and understand the challenge brief | | |
 | 🟢 | Create checklist from brief | | |
 | 🟢 | Set up GitHub repo | | |
-| 🔴 | Read all 6 sample data files thoroughly | | `Boldr Data/` folder |
-| 🔴 | Map out data schema across files | | Understand how files link together |
-| 🔴 | Identify any data gaps vs. brief's file list | | Brief mentions 9 files, folder has 6 |
+| 🟢 | Read all 6 sample data files thoroughly | | `Boldr Data/` folder |
+| 🟢 | Map out data schema across files | | See `data_observations.md` |
+| 🟢 | Identify any data gaps vs. brief's file list | | 3 files missing: 07, 08, 09 — noted in `data_observations.md` |
 
 ---
 
@@ -22,11 +22,11 @@
 
 | Status | Task | Owner | Notes |
 |--------|------|-------|-------|
-| 🔴 | Choose automation platform | | n8n or Make.com recommended |
-| 🔴 | Design the 7-step intelligence loop (diagram) | | Before building |
-| 🔴 | Define Knowledge Base structure | | How docs are stored/queried |
-| 🔴 | Define prompt templates | | Ingest, classify, draft reply, KB entry |
-| 🔴 | Design human approval gate flow | | No auto-send without approval |
+| 🟢 | Choose automation platform | | Make.com — see `workflow_architecture.md` |
+| 🟢 | Design the 7-step intelligence loop (diagram) | | See `workflow_architecture.md` §2 |
+| 🟢 | Define Knowledge Base structure | | See `workflow_architecture.md` §3 |
+| 🟢 | Define prompt templates | | 4 prompts defined — see `workflow_architecture.md` §4 |
+| 🟢 | Design human approval gate flow | | Google Sheets gate + KPIs — see `workflow_architecture.md` §5 |
 
 ---
 
