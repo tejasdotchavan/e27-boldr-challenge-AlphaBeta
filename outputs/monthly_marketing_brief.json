@@ -1,0 +1,162 @@
+{
+  "month": {
+    "start": "2026-04-12",
+    "end": "2026-05-12",
+    "generated": "2026-05-17T10:06:36.002807"
+  },
+  "executive_summary": {
+    "total_tickets": 11,
+    "unmet_demand_signals": 5,
+    "recurring_questions": 0,
+    "content_recommendations": 1,
+    "kb_gap_rate": "45%"
+  },
+  "unmet_demand": [
+    {
+      "ticket_id": "TKT-1070",
+      "date": "2026-04-19",
+      "question": "Engraving in Arabic script",
+      "message": "Can you engrave in Arabic? I want to put a dedication in Arabic for my father.",
+      "persona": "niche_buyer",
+      "channel": "email",
+      "category": "knowledge_gap",
+      "escalated": true
+    },
+    {
+      "ticket_id": "TKT-1028",
+      "date": "2026-04-22",
+      "question": "Strap recycling programme",
+      "message": "Do you have a strap recycling or take-back programme? I have three old straps I'd like to dispose of responsibly.",
+      "persona": "niche_buyer",
+      "channel": "email",
+      "category": "knowledge_gap",
+      "escalated": true
+    },
+    {
+      "ticket_id": "TKT-1036",
+      "date": "2026-04-27",
+      "question": "Vegan-friendly materials",
+      "message": "Are all your straps vegan-friendly? I don't use any animal products and want to make sure the leather alternative is genuinely synthetic.",
+      "persona": "niche_buyer",
+      "channel": "instagram_dm",
+      "category": "knowledge_gap",
+      "escalated": true
+    },
+    {
+      "ticket_id": "TKT-1056",
+      "date": "2026-05-04",
+      "question": "Tracking number not updating",
+      "message": "My tracking number DHL9697354961 hasn't updated in 5 days. Is there a delay?",
+      "persona": "transactional",
+      "channel": "instagram_dm",
+      "category": "order_status",
+      "escalated": true
+    },
+    {
+      "ticket_id": "TKT-1013",
+      "date": "2026-05-10",
+      "question": "Carbon footprint of shipping",
+      "message": "Do you offer carbon-neutral shipping? I try to offset my purchases where possible.",
+      "persona": "niche_buyer",
+      "channel": "chat",
+      "category": "knowledge_gap",
+      "escalated": true
+    }
+  ],
+  "recurring_questions": [],
+  "persona_breakdown": {
+    "niche_buyer": {
+      "count": 4,
+      "top_questions": {
+        "knowledge_gap": 4
+      },
+      "kb_coverage": "0%",
+      "escalation_rate": "100%",
+      "top_subjects": {
+        "Engraving in Arabic script": 1,
+        "Strap recycling programme": 1,
+        "Vegan-friendly materials": 1
+      }
+    },
+    "prospect": {
+      "count": 2,
+      "top_questions": {
+        "product_general": 2
+      },
+      "kb_coverage": "100%",
+      "escalation_rate": "0%",
+      "top_subjects": {
+        "Wholesale or bulk order": 1,
+        "Gifting \u2014 personalisation options": 1
+      }
+    },
+    "owner_aftercare": {
+      "count": 1,
+      "top_questions": {
+        "servicing": 1
+      },
+      "kb_coverage": "100%",
+      "escalation_rate": "0%",
+      "top_subjects": {
+        "Scratches on case \u2014 can you polish?": 1
+      }
+    },
+    "enthusiast": {
+      "count": 1,
+      "top_questions": {
+        "strap_compatibility": 1
+      },
+      "kb_coverage": "100%",
+      "escalation_rate": "0%",
+      "top_subjects": {
+        "Mesh bracelet compatibility": 1
+      }
+    },
+    "health_conscious": {
+      "count": 1,
+      "top_questions": {
+        "materials_safety": 1
+      },
+      "kb_coverage": "100%",
+      "escalation_rate": "0%",
+      "top_subjects": {
+        "Water resistance and materials": 1
+      }
+    },
+    "transactional": {
+      "count": 1,
+      "top_questions": {
+        "order_status": 1
+      },
+      "kb_coverage": "0%",
+      "escalation_rate": "100%",
+      "top_subjects": {
+        "Tracking number not updating": 1
+      }
+    },
+    "gifter": {
+      "count": 1,
+      "top_questions": {
+        "engraving": 1
+      },
+      "kb_coverage": "100%",
+      "escalation_rate": "0%",
+      "top_subjects": {
+        "Font options for engraving": 1
+      }
+    }
+  },
+  "recommendations": [
+    {
+      "action": "IMPROVE KB COVERAGE",
+      "topic": "Niche Buyer segment",
+      "urgency": "HIGH",
+      "personas_affected": [
+        "niche_buyer"
+      ],
+      "why": "Niche Buyer has 0% KB coverage. High escalation rate suggests unmet needs.",
+      "suggested_placement": "Landing page, FAQ, targeted content",
+      "example_tickets": []
+    }
+  ]
+}

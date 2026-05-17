@@ -1,0 +1,101 @@
+{
+  "week": {
+    "start": "2026-05-05",
+    "end": "2026-05-12",
+    "generated": "2026-05-17T10:06:35.655854"
+  },
+  "summary": {
+    "total_tickets": 3,
+    "unique_themes": 3,
+    "kb_coverage": "67%",
+    "escalation_rate": "33%"
+  },
+  "themes": [
+    {
+      "name": "Gifting & Engraving",
+      "count": 1,
+      "kb_answerable": 1,
+      "knowledge_gaps": 0,
+      "escalations": 0,
+      "personas": {
+        "gifter": 1
+      },
+      "channels": {
+        "email": 1
+      },
+      "statuses": {
+        "open": 1
+      },
+      "samples": [
+        {
+          "ticket_id": "TKT-1069",
+          "subject": "Font options for engraving",
+          "persona": "gifter",
+          "answered_by_kb": "yes",
+          "escalation": "no"
+        }
+      ],
+      "trend_flags": [
+        "\ud83d\udcc8 Emerging theme (1/1 recent)"
+      ]
+    },
+    {
+      "name": "Gifting Options",
+      "count": 1,
+      "kb_answerable": 1,
+      "knowledge_gaps": 0,
+      "escalations": 0,
+      "personas": {
+        "prospect": 1
+      },
+      "channels": {
+        "chat": 1
+      },
+      "statuses": {
+        "resolved": 1
+      },
+      "samples": [
+        {
+          "ticket_id": "TKT-1027",
+          "subject": "Gifting \u2014 personalisation options",
+          "persona": "prospect",
+          "answered_by_kb": "yes",
+          "escalation": "no"
+        }
+      ],
+      "trend_flags": [
+        "\ud83d\udcc8 Emerging theme (1/1 recent)"
+      ]
+    },
+    {
+      "name": "Sustainability & Ethics",
+      "count": 1,
+      "kb_answerable": 0,
+      "knowledge_gaps": 1,
+      "escalations": 1,
+      "personas": {
+        "niche_buyer": 1
+      },
+      "channels": {
+        "chat": 1
+      },
+      "statuses": {
+        "escalated": 1
+      },
+      "samples": [
+        {
+          "ticket_id": "TKT-1013",
+          "subject": "Carbon footprint of shipping",
+          "persona": "niche_buyer",
+          "answered_by_kb": "no",
+          "escalation": "yes"
+        }
+      ],
+      "trend_flags": [
+        "\u26a0 High escalation rate (100%)",
+        "\ud83d\udcda Low KB coverage (0%)",
+        "\ud83d\udcc8 Emerging theme (1/1 recent)"
+      ]
+    }
+  ]
+}

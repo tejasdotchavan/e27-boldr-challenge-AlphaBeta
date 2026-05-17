@@ -1,0 +1,122 @@
+{
+  "period": "May 2026",
+  "generated": "2026-05-17T10:37:52.970922",
+  "validation_sources": [
+    "Google Trends (search volume)",
+    "Reddit PRAW (real discussions)",
+    "Competitor feature timeline",
+    "Product Hunt launches"
+  ],
+  "themes": [
+    {
+      "theme": "Titanium Grade Specs",
+      "signal": "\ud83d\udfe1 BALANCED SIGNAL",
+      "confidence": "MEDIUM",
+      "action": "Market & Boldr aligned",
+      "reasoning": {
+        "search_trend": "GROWING (+13%)",
+        "google_volume": [
+          45,
+          47,
+          48,
+          50,
+          52,
+          51
+        ],
+        "reddit_engagement": "234 avg upvotes, 2134 comments",
+        "reddit_sentiment": "NEUTRAL - commodity discussion",
+        "competitor_status": "LAUNCHED",
+        "when_launched": "2019",
+        "boldr_tickets": 4
+      }
+    },
+    {
+      "theme": "Vegan/Sustainable Straps",
+      "signal": "\ud83d\udfe2 MARKET-WIDE BASELINE",
+      "confidence": "HIGH",
+      "action": "TABLE STAKES - Match competitors, urgent",
+      "reasoning": {
+        "search_trend": "GROWING (+192%)",
+        "google_volume": [
+          12,
+          14,
+          18,
+          22,
+          28,
+          35
+        ],
+        "reddit_engagement": "156 avg upvotes, 487 comments",
+        "reddit_sentiment": "POSITIVE - demand evident",
+        "competitor_status": "LAUNCHED",
+        "when_launched": "2023-Q1",
+        "boldr_tickets": 3
+      }
+    },
+    {
+      "theme": "Carbon Neutral Shipping",
+      "signal": "\ud83d\udfe2 MARKET-WIDE BASELINE",
+      "confidence": "HIGH",
+      "action": "TABLE STAKES - Match competitors, urgent",
+      "reasoning": {
+        "search_trend": "GROWING (+88%)",
+        "google_volume": [
+          8,
+          9,
+          11,
+          12,
+          13,
+          15
+        ],
+        "reddit_engagement": "34 avg upvotes, 78 comments",
+        "reddit_sentiment": "MIXED - niche but passionate",
+        "competitor_status": "LAUNCHED",
+        "when_launched": "2023-Q3",
+        "boldr_tickets": 1
+      }
+    },
+    {
+      "theme": "Multi-Script Engraving",
+      "signal": "\ud83d\udfe2 MARKET-WIDE BASELINE",
+      "confidence": "MEDIUM",
+      "action": "Commodity feature - match competitors",
+      "reasoning": {
+        "search_trend": "GROWING (+14%)",
+        "google_volume": [
+          35,
+          36,
+          38,
+          37,
+          39,
+          40
+        ],
+        "reddit_engagement": "89 avg upvotes, 456 comments",
+        "reddit_sentiment": "POSITIVE but niche",
+        "competitor_status": "LAUNCHED",
+        "when_launched": "2025-Q1",
+        "boldr_tickets": 2
+      }
+    },
+    {
+      "theme": "Hypoallergenic/BPA-Free",
+      "signal": "\ud83d\udfe2 MARKET-WIDE BASELINE",
+      "confidence": "MEDIUM",
+      "action": "Commodity feature - match competitors",
+      "reasoning": {
+        "search_trend": "GROWING (+20%)",
+        "google_volume": [
+          20,
+          21,
+          21,
+          22,
+          23,
+          24
+        ],
+        "reddit_engagement": "89 avg upvotes, 456 comments",
+        "reddit_sentiment": "POSITIVE but niche",
+        "competitor_status": "MISSING",
+        "when_launched": "Never",
+        "boldr_tickets": 11
+      }
+    }
+  ]
+}

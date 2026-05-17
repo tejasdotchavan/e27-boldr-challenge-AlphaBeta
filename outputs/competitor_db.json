@@ -1,0 +1,209 @@
+{
+  "last_updated": "2026-05-17",
+  "competitors": {
+    "Nordgreen": {
+      "url": "https://nordgreen.com",
+      "watch_type": "Danish minimalist",
+      "features": {
+        "vegan_strap": {
+          "status": "launched",
+          "date": "2023-Q1",
+          "marketing_prominence": "high",
+          "source": "https://nordgreen.com/blogs/news/vegan-strap-launch",
+          "social_response": {
+            "instagram_likes": 4200,
+            "twitter_retweets": 312,
+            "sentiment": "positive"
+          },
+          "notes": "Heavy homepage feature, full campaign"
+        },
+        "carbon_neutral_shipping": {
+          "status": "launched",
+          "date": "2023-Q3",
+          "marketing_prominence": "medium",
+          "source": "https://nordgreen.com/pages/sustainability",
+          "social_response": {
+            "instagram_likes": 2100,
+            "twitter_retweets": 178,
+            "sentiment": "positive"
+          },
+          "notes": "Offset via DHL GoGreen, badge on checkout"
+        },
+        "bpa_free_certification": {
+          "status": "launched",
+          "date": "2022-Q4",
+          "marketing_prominence": "medium",
+          "source": "https://nordgreen.com/pages/materials",
+          "social_response": null,
+          "notes": "On materials page, not prominently marketed"
+        },
+        "multi_script_engraving": {
+          "status": "not_launched",
+          "date": null,
+          "marketing_prominence": null,
+          "source": null,
+          "social_response": null,
+          "notes": "Latin characters only as of May 2026"
+        },
+        "titanium_grade5": {
+          "status": "launched",
+          "date": "2020",
+          "marketing_prominence": "high",
+          "source": "https://nordgreen.com/pages/materials",
+          "social_response": null,
+          "notes": "Standard across all models"
+        }
+      }
+    },
+    "Solios": {
+      "url": "https://solioswatches.com",
+      "watch_type": "Solar-powered microbrands",
+      "features": {
+        "vegan_strap": {
+          "status": "launched",
+          "date": "2023-Q2",
+          "marketing_prominence": "high",
+          "source": "https://solioswatches.com/collections/vegan-straps",
+          "social_response": {
+            "instagram_likes": 3800,
+            "twitter_retweets": 290,
+            "sentiment": "positive"
+          },
+          "notes": "Dedicated vegan strap collection, top menu item"
+        },
+        "carbon_neutral_shipping": {
+          "status": "launched",
+          "date": "2024-Q1",
+          "marketing_prominence": "medium",
+          "source": "https://solioswatches.com/pages/planet",
+          "social_response": {
+            "instagram_likes": 1200,
+            "twitter_retweets": 89,
+            "sentiment": "positive"
+          },
+          "notes": "Carbon offset through Pachama forestry"
+        },
+        "multi_script_engraving": {
+          "status": "launched",
+          "date": "2025-Q1",
+          "marketing_prominence": "low",
+          "source": "https://solioswatches.com/pages/personalization",
+          "social_response": {
+            "instagram_likes": 450,
+            "twitter_retweets": 34,
+            "sentiment": "positive"
+          },
+          "notes": "Arabic, Chinese, Latin. Quiet launch, no campaign"
+        },
+        "bpa_free_certification": {
+          "status": "launched",
+          "date": "2023",
+          "marketing_prominence": "low",
+          "source": "https://solioswatches.com/pages/materials",
+          "social_response": null,
+          "notes": "Listed in FAQ, not prominently marketed"
+        },
+        "titanium_grade5": {
+          "status": "not_launched",
+          "date": null,
+          "marketing_prominence": null,
+          "source": null,
+          "social_response": null,
+          "notes": "Uses stainless steel; titanium not in lineup"
+        }
+      }
+    },
+    "Minase": {
+      "url": "https://minase-watches.com",
+      "watch_type": "Japanese artisan, titanium-focused",
+      "features": {
+        "titanium_grade5": {
+          "status": "launched",
+          "date": "2019",
+          "marketing_prominence": "high",
+          "source": "https://minase-watches.com/technology",
+          "social_response": null,
+          "notes": "Core brand identity, Grade 5 is central to all models"
+        },
+        "vegan_strap": {
+          "status": "not_launched",
+          "date": null,
+          "marketing_prominence": null,
+          "source": null,
+          "social_response": null,
+          "notes": "Premium leather only, sustainability not a focus"
+        },
+        "carbon_neutral_shipping": {
+          "status": "not_launched",
+          "date": null,
+          "marketing_prominence": null,
+          "source": null,
+          "social_response": null,
+          "notes": null
+        },
+        "multi_script_engraving": {
+          "status": "launched",
+          "date": "2018",
+          "marketing_prominence": "medium",
+          "source": "https://minase-watches.com/personalization",
+          "social_response": null,
+          "notes": "Kanji + Latin engraving, artisan positioning"
+        },
+        "bpa_free_certification": {
+          "status": "not_launched",
+          "date": null,
+          "marketing_prominence": null,
+          "source": null,
+          "social_response": null,
+          "notes": null
+        }
+      }
+    },
+    "Boldr": {
+      "url": "https://boldrwatch.com",
+      "watch_type": "Singapore titanium microbrands",
+      "features": {
+        "vegan_strap": {
+          "status": "not_launched",
+          "date": null,
+          "marketing_prominence": null,
+          "source": null,
+          "social_response": null,
+          "notes": "No vegan options as of May 2026"
+        },
+        "carbon_neutral_shipping": {
+          "status": "not_launched",
+          "date": null,
+          "marketing_prominence": null,
+          "source": null,
+          "social_response": null,
+          "notes": "No sustainability commitments public as of May 2026"
+        },
+        "multi_script_engraving": {
+          "status": "partial",
+          "date": "unknown",
+          "marketing_prominence": "low",
+          "source": null,
+          "social_response": null,
+          "notes": "Chinese supported per FAQ; Arabic unconfirmed \u2014 TKT-1070 was a gap"
+        },
+        "bpa_free_certification": {
+          "status": "partial",
+          "date": "unknown",
+          "marketing_prominence": "low",
+          "source": null,
+          "social_response": null,
+          "notes": "36% KB coverage \u2014 confirmed for some straps, not all"
+        },
+        "titanium_grade5": {
+          "status": "launched",
+          "date": "2023",
+          "marketing_prominence": "medium",
+          "source": "https://boldrwatch.com/pages/materials",
+          "social_response": null,
+          "notes": "Grade 5 on Expedition model; not always surfaced clearly"
+        }
+      }
+    }
+  }
+}

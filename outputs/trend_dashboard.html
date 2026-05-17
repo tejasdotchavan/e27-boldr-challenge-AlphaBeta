@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Boldr Trend Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0B1437 0%, #1F2440 100%);
+      color: #fff;
+      padding: 28px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 { font-size: 22px; font-weight: 700; letter-spacing: .5px; }
+    header h1 span { color: #C9A961; }
+    header p { font-size: 12px; color: #9CA3C8; margin-top: 4px; }
+
+    .legend-row {
+      display: flex;
+      gap: 20px;
+      background: #fff;
+      padding: 12px 40px;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 12px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(640px, 1fr));
+      gap: 20px;
+      padding: 24px 40px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 6px rgba(0,0,0,.08);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .card-title { font-size: 15px; font-weight: 700; }
+
+    .signal-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .badge-opportunity { background: #FEE2E2; color: #991B1B; }
+    .badge-balanced    { background: #FEF3C7; color: #92400E; }
+    .badge-emerging    { background: #EDE9FE; color: #5B21B6; }
+    .badge-baseline    { background: #D1FAE5; color: #065F46; }
+
+    .card-body { padding: 16px 20px; }
+
+    .chart-wrap { height: 180px; position: relative; }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .metric {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+
+    .metric-label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 600; }
+    .metric-value { font-size: 20px; font-weight: 800; color: #1a1a2e; }
+    .metric-sub   { font-size: 11px; color: #666; margin-top: 2px; }
+
+    .competitors-section { margin-top: 14px; }
+    .competitors-section h4 { font-size: 12px; color: #888; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+
+    .comp-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+
+    .comp-brand { font-weight: 600; }
+    .comp-date  { color: #888; font-size: 11px; }
+
+    .comp-social {
+      display: flex;
+      gap: 12px;
+      font-size: 12px;
+    }
+
+    .comp-social a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .comp-social a:hover { text-decoration: underline; }
+
+    .no-competitor {
+      color: #10B981;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 10px;
+      background: #ECFDF5;
+      border-radius: 6px;
+    }
+
+    .reddit-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background: #fff7ed;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    .reddit-row a {
+      color: #c2410c;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .reddit-row a:hover { text-decoration: underline; }
+
+    .reddit-quote {
+      font-style: italic;
+      font-size: 11px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .action-bar {
+      background: #f0f4ff;
+      border-left: 3px solid #667eea;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #1e3a8a;
+      border-radius: 0 6px 6px 0;
+      margin-top: 12px;
+    }
+
+    footer {
+      text-align: center;
+      color: #aaa;
+      font-size: 11px;
+      padding: 24px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Boldr <span>Trend Intelligence</span> Dashboard</h1>
+    <p>Google search trajectories · Competitor launch timeline · Reddit community signal · May 2026</p>
+  </div>
+  <div style="text-align:right; font-size:12px; color:#9CA3C8">
+    <div>Sources: Google Trends · r/Watches · WatchUSeek · r/watchexchange</div>
+    <div style="margin-top:4px">Updated: May 17, 2026</div>
+  </div>
+</header>
+
+<div class="legend-row">
+  <div class="legend-item"><span class="dot" style="background:#667eea"></span> Google search volume (index)</div>
+  <div class="legend-item"><span class="dot" style="background:#C9A961"></span> Boldr ticket count (per month)</div>
+  <div class="legend-item"><span style="font-size:11px">🔴 Boldr-Specific Opportunity &nbsp; 🟡 Balanced / Emerging &nbsp; 🟢 Table Stakes (Urgent)</span></div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<footer>Boldr Self-Improving Customer Intelligence Engine &nbsp;·&nbsp; Team AlphaBeta &nbsp;·&nbsp; Echelon 2026</footer>
+
+<script>
+const MONTHS = ["Nov '25", "Dec '25", "Jan '26", "Feb '26", "Mar '26", "Apr '26", "May '26"];
+const THEMES = {"Vegan/Sustainable Straps": {"google_trend": [12, 14, 18, 22, 28, 32, 35], "boldr_tickets": [0, 0, 0, 1, 1, 1, 0], "color": "#e74c3c", "reddit_posts": 12, "reddit_upvotes": 156, "reddit_top_post": "\"Finally found a vegan watch strap that actually works\"", "reddit_url": "https://reddit.com/r/watches/search?q=vegan+strap&sort=top", "competitors_launched": [{"brand": "Nordgreen", "date": "2023-Q1", "ig_likes": 4200, "url": "https://nordgreen.com/blogs/news/vegan-strap-launch"}, {"brand": "Solios", "date": "2023-Q2", "ig_likes": 3800, "url": "https://solioswatches.com/collections/vegan-straps"}], "boldr_kb_coverage": 0, "signal": "\ud83d\udfe2 TABLE STAKES", "action": "Match competitors immediately \u2014 2-3 years behind market"}, "Carbon Neutral Shipping": {"google_trend": [8, 9, 11, 12, 13, 14, 15], "boldr_tickets": [0, 0, 0, 0, 0, 1, 0], "color": "#27ae60", "reddit_posts": 4, "reddit_upvotes": 34, "reddit_top_post": "\"Does any watch brand offer carbon offset shipping?\"", "reddit_url": "https://reddit.com/r/watches/search?q=carbon+shipping&sort=top", "competitors_launched": [{"brand": "Nordgreen", "date": "2023-Q3", "ig_likes": 2100, "url": "https://nordgreen.com/pages/sustainability"}, {"brand": "Solios", "date": "2024-Q1", "ig_likes": 1200, "url": "https://solioswatches.com/pages/planet"}], "boldr_kb_coverage": 0, "signal": "\ud83d\udfe2 TABLE STAKES", "action": "Add carbon offset to checkout \u2014 quick win with badge"}, "BPA-Free / Hypoallergenic": {"google_trend": [20, 21, 21, 22, 23, 23, 24], "boldr_tickets": [1, 1, 2, 2, 1, 2, 2], "color": "#8e44ad", "reddit_posts": 8, "reddit_upvotes": 89, "reddit_top_post": "\"Hypoallergenic watch straps \u2014 what are my options?\"", "reddit_url": "https://reddit.com/r/watches/search?q=hypoallergenic+strap&sort=top", "competitors_launched": [], "boldr_kb_coverage": 36, "signal": "\ud83d\udd34 BOLDR-SPECIFIC OPPORTUNITY", "action": "Market is quiet \u2014 Boldr can LEAD. Add product badge + improve KB to 80%+"}, "Titanium Grade & Safety": {"google_trend": [45, 47, 48, 50, 52, 51, 51], "boldr_tickets": [0, 0, 1, 1, 1, 1, 0], "color": "#2980b9", "reddit_posts": 87, "reddit_upvotes": 234, "reddit_top_post": "\"Grade 5 titanium is the standard now \u2014 not a differentiator\"", "reddit_url": "https://reddit.com/r/watches/search?q=titanium+grade+5&sort=top", "competitors_launched": [{"brand": "Minase", "date": "2019", "ig_likes": 0, "url": "https://minase-watches.com/technology"}, {"brand": "Nordgreen", "date": "2020", "ig_likes": 0, "url": "https://nordgreen.com/pages/materials"}], "boldr_kb_coverage": 50, "signal": "\ud83d\udfe1 BALANCED", "action": "Standard spec \u2014 improve messaging, not differentiation"}, "Multi-Script Engraving": {"google_trend": [35, 36, 38, 37, 39, 40, 40], "boldr_tickets": [0, 1, 0, 0, 1, 0, 0], "color": "#f39c12", "reddit_posts": 6, "reddit_upvotes": 67, "reddit_top_post": "\"Why can't more brands support Arabic/Chinese engraving?\"", "reddit_url": "https://reddit.com/r/watches/search?q=engraving+arabic+chinese&sort=top", "competitors_launched": [{"brand": "Solios", "date": "2025-Q1", "ig_likes": 450, "url": "https://solioswatches.com/pages/personalization"}, {"brand": "Minase", "date": "2018", "ig_likes": 0, "url": "https://minase-watches.com/personalization"}], "boldr_kb_coverage": 40, "signal": "\ud83d\udfe1 EMERGING NICHE", "action": "Only 1 recent competitor. Confirm Arabic support \u2192 update KB"}};
+
+const BADGE = {
+  "🟢 TABLE STAKES":           ["baseline",    "badge-baseline"],
+  "🔴 BOLDR-SPECIFIC OPPORTUNITY": ["opportunity", "badge-opportunity"],
+  "🟡 BALANCED":               ["balanced",    "badge-balanced"],
+  "🟡 EMERGING NICHE":         ["emerging",    "badge-emerging"]
+};
+
+function makeChart(canvasId, theme) {
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: MONTHS,
+      datasets: [
+        {
+          label: 'Google Search Index',
+          data: theme.google_trend,
+          borderColor: '#667eea',
+          backgroundColor: 'rgba(102,126,234,0.08)',
+          borderWidth: 2.5,
+          pointRadius: 3,
+          tension: 0.35,
+          fill: true,
+          yAxisID: 'y'
+        },
+        {
+          label: 'Boldr Tickets / Month',
+          data: theme.boldr_tickets,
+          borderColor: '#C9A961',
+          backgroundColor: 'rgba(201,169,97,0.15)',
+          borderWidth: 2,
+          pointRadius: 4,
+          borderDash: [5,3],
+          tension: 0.2,
+          fill: true,
+          yAxisID: 'y1'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: { boxWidth: 12, font: { size: 11 } }
+        },
+        tooltip: { bodyFont: { size: 12 } }
+      },
+      scales: {
+        y: {
+          type: 'linear',
+          display: true,
+          position: 'left',
+          title: { display: true, text: 'Search Index', font: { size: 10 } },
+          grid: { color: '#f0f0f0' },
+          ticks: { font: { size: 10 } }
+        },
+        y1: {
+          type: 'linear',
+          display: true,
+          position: 'right',
+          title: { display: true, text: 'Tickets', font: { size: 10 } },
+          grid: { drawOnChartArea: false },
+          ticks: { font: { size: 10 }, stepSize: 1 },
+          min: 0
+        },
+        x: { ticks: { font: { size: 10 } } }
+      }
+    }
+  });
+}
+
+function trendPct(arr) {
+  const pct = ((arr[arr.length-1] - arr[0]) / arr[0] * 100).toFixed(0);
+  return pct > 0 ? `+${pct}%` : `${pct}%`;
+}
+
+function renderCards() {
+  const grid = document.getElementById('grid');
+
+  Object.entries(THEMES).forEach(([name, t], i) => {
+    const canvasId = `chart-${i}`;
+    const [, badgeClass] = BADGE[t.signal] || ['', 'badge-balanced'];
+
+    const startVol = t.google_trend[0];
+    const endVol   = t.google_trend[t.google_trend.length - 1];
+    const totalTickets = t.boldr_tickets.reduce((a, b) => a + b, 0);
+
+    const compRows = t.competitors_launched.length > 0
+      ? t.competitors_launched.map(c => `
+        <div class="comp-row">
+          <div>
+            <span class="comp-brand">${c.brand}</span>
+            <span class="comp-date"> · launched ${c.date}</span>
+          </div>
+          <div class="comp-social">
+            ${c.ig_likes > 0 ? `<span>🤍 ${c.ig_likes.toLocaleString()} IG likes</span>` : ''}
+            <a href="${c.url}" target="_blank">View launch →</a>
+          </div>
+        </div>`).join('')
+      : `<div class="no-competitor">✓ No competitor has launched this yet — first-mover opportunity</div>`;
+
+    grid.innerHTML += `
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">${name}</div>
+          <span class="signal-badge ${badgeClass}">${t.signal}</span>
+        </div>
+        <div class="card-body">
+
+          <div class="chart-wrap">
+            <canvas id="${canvasId}"></canvas>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-label">Search trend</div>
+              <div class="metric-value">${trendPct(t.google_trend)}</div>
+              <div class="metric-sub">Nov '25 → May '26</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Boldr tickets</div>
+              <div class="metric-value">${totalTickets}</div>
+              <div class="metric-sub">6-month total</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">KB coverage</div>
+              <div class="metric-value" style="color:${t.boldr_kb_coverage < 40 ? '#dc2626' : '#16a34a'}">${t.boldr_kb_coverage}%</div>
+              <div class="metric-sub">current FAQ</div>
+            </div>
+          </div>
+
+          <div class="competitors-section">
+            <h4>Competitor Launches</h4>
+            ${compRows}
+          </div>
+
+          <div class="competitors-section" style="margin-top:12px">
+            <h4>Community Signal (r/Watches)</h4>
+            <div class="reddit-row">
+              <div>
+                <div>📊 ${t.reddit_posts} posts &nbsp;·&nbsp; avg ${t.reddit_upvotes} upvotes</div>
+                <div class="reddit-quote">${t.reddit_top_post}</div>
+              </div>
+              <a href="${t.reddit_url}" target="_blank">Browse posts →</a>
+            </div>
+          </div>
+
+          <div class="action-bar">
+            <strong>Action:</strong> ${t.action}
+          </div>
+
+        </div>
+      </div>`;
+  });
+
+  // Render charts after DOM is built
+  Object.entries(THEMES).forEach(([, t], i) => {
+    makeChart(`chart-${i}`, t);
+  });
+}
+
+renderCards();
+</script>
+</body>
+</html>

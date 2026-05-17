@@ -1,0 +1,69 @@
+{
+  "benchmarking_period": {
+    "month_end": "2026-05-12",
+    "generated": "2026-05-17T10:16:59.029003",
+    "sources_analyzed": {
+      "reddit": 1,
+      "forums": 2,
+      "review_sites": 2,
+      "total": 5
+    }
+  },
+  "summary": {
+    "boldr_specific_opportunities": 0,
+    "boldr_specific_concerns": 0,
+    "market_wide_baselines": 2
+  },
+  "analyses": [
+    {
+      "theme": "BPA-free / Materials Safety",
+      "signal_type": "\ud83d\udfe1 BALANCED SIGNAL",
+      "internal_freq": 11,
+      "external_signal_strength": 24,
+      "ratio": "2.2x market",
+      "insight": "Market cares, and so do Boldr customers. Priority: standard implementation.",
+      "kb_coverage": "36%",
+      "escalation_rate": "36%"
+    },
+    {
+      "theme": "Sustainability & Vegan Straps",
+      "signal_type": "\ud83d\udfe1 BALANCED SIGNAL",
+      "internal_freq": 3,
+      "external_signal_strength": 24,
+      "ratio": "8.0x market",
+      "insight": "Market cares, and so do Boldr customers. Priority: standard implementation.",
+      "kb_coverage": "0%",
+      "escalation_rate": "100%"
+    },
+    {
+      "theme": "Engraving (Multi-Script & Gifting)",
+      "signal_type": "\ud83d\udfe1 BALANCED SIGNAL",
+      "internal_freq": 10,
+      "external_signal_strength": 24,
+      "ratio": "2.4x market",
+      "insight": "Market cares, and so do Boldr customers. Priority: standard implementation.",
+      "kb_coverage": "60%",
+      "escalation_rate": "30%"
+    },
+    {
+      "theme": "Titanium Grade & Safety",
+      "signal_type": "\ud83d\udfe2 MARKET-WIDE BASELINE EXPECTATION",
+      "internal_freq": 4,
+      "external_signal_strength": 213,
+      "ratio": "53.2x market",
+      "insight": "This is table stakes \u2014 every brand is addressing it. Boldr needs to be competitive, not differentiated.",
+      "kb_coverage": "50%",
+      "escalation_rate": "25%"
+    },
+    {
+      "theme": "Strap Compatibility & Customization",
+      "signal_type": "\ud83d\udfe2 MARKET-WIDE BASELINE EXPECTATION",
+      "internal_freq": 8,
+      "external_signal_strength": 84,
+      "ratio": "10.5x market",
+      "insight": "This is table stakes \u2014 every brand is addressing it. Boldr needs to be competitive, not differentiated.",
+      "kb_coverage": "75%",
+      "escalation_rate": "25%"
+    }
+  ]
+}
