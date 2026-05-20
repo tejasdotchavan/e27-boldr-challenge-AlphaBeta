@@ -1,0 +1,77 @@
+{
+  "name": "BOLDR — 3. Reject Webhook",
+  "versionId": "a3000000-0000-4000-8000-000000000003",
+  "nodes": [
+    {
+      "id": "c1000001-0000-4000-8000-000000000003",
+      "name": "Reject Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [140, 300],
+      "webhookId": "c1000001-0000-4000-8000-000000000033",
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "boldr-reject",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "c1000002-0000-4000-8000-000000000003",
+      "name": "Mark CS Queue in Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [360, 300],
+      "parameters": {
+        "operation": "update",
+        "documentId": { "__rl": true, "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID", "mode": "id" },
+        "sheetName":  { "__rl": true, "value": "Sheet1", "mode": "name" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ticket_id": "={{ $json.query.id }}",
+            "status":    "cs_pending"
+          },
+          "matchingColumns": ["ticket_id"],
+          "schema": []
+        },
+        "options": { "valueInputMode": "USER_ENTERED" }
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "id": "c1000003-0000-4000-8000-000000000003",
+      "name": "Respond — Rejected",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [580, 300],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"success\": true, \"action\": \"rejected\"}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Reject Request": {
+      "main": [[{ "node": "Mark CS Queue in Sheets", "type": "main", "index": 0 }]]
+    },
+    "Mark CS Queue in Sheets": {
+      "main": [[{ "node": "Respond — Rejected", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "BOLDR" }]
+}

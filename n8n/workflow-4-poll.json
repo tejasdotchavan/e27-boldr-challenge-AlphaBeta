@@ -1,0 +1,126 @@
+{
+  "name": "BOLDR — 4. Poll Webhook",
+  "versionId": "a4000000-0000-4000-8000-000000000004",
+  "nodes": [
+    {
+      "id": "d1000001-0000-4000-8000-000000000004",
+      "name": "Poll Request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [140, 300],
+      "webhookId": "d1000001-0000-4000-8000-000000000044",
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "boldr-poll",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "d1000002-0000-4000-8000-000000000004",
+      "name": "Read All Rows",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [360, 300],
+      "parameters": {
+        "operation": "read",
+        "documentId": { "__rl": true, "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID", "mode": "id" },
+        "sheetName":  { "__rl": true, "value": "Sheet1", "mode": "name" },
+        "options": {}
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "id": "d1000003-0000-4000-8000-000000000004",
+      "name": "Find Row by Session ID",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [580, 300],
+      "parameters": {
+        "jsCode": "const targetSession = $('Poll Request').first().json.query.session_id;\nconst rows = $input.all();\nconst match = rows.find(r => r.json.session_id === targetSession);\nif (!match) {\n  return [{ json: { status: 'pending', cs_answer: '' } }];\n}\nreturn [{ json: { status: match.json.status || 'pending', cs_answer: match.json.cs_answer || '' } }];"
+      }
+    },
+    {
+      "id": "d1000004-0000-4000-8000-000000000004",
+      "name": "Is Resolved?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [800, 300],
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": false, "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "cond-resolved",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "resolved",
+              "operator": { "type": "string", "operation": "equals" }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "d1000005-0000-4000-8000-000000000004",
+      "name": "Respond — Resolved",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1020, 160],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ status: 'resolved', reply: $json.cs_answer }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "d1000006-0000-4000-8000-000000000004",
+      "name": "Respond — Pending",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1020, 440],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"pending\"}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Poll Request": {
+      "main": [[{ "node": "Read All Rows", "type": "main", "index": 0 }]]
+    },
+    "Read All Rows": {
+      "main": [[{ "node": "Find Row by Session ID", "type": "main", "index": 0 }]]
+    },
+    "Find Row by Session ID": {
+      "main": [[{ "node": "Is Resolved?", "type": "main", "index": 0 }]]
+    },
+    "Is Resolved?": {
+      "main": [
+        [{ "node": "Respond — Resolved", "type": "main", "index": 0 }],
+        [{ "node": "Respond — Pending",  "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "BOLDR" }]
+}
