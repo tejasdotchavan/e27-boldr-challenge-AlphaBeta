@@ -47,7 +47,7 @@
     .shell {
       display: flex;
       height: 100vh;
-      max-width: 1120px;
+      max-width: 1560px;
       margin: 0 auto;
       overflow: hidden;
     }
@@ -213,27 +213,23 @@
       border-radius: 4px;
     }
 
-    /* ── Right panel ── */
-    .right-panel {
+    /* ── Chat columns ── */
+    .chat-col {
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 20px 20px 20px 20px;
+      padding: 20px 14px;
       min-width: 0;
       overflow: hidden;
     }
 
-    .right-inner {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      max-width: 680px;
-      width: 100%;
-      margin: 0 auto;
-      overflow: hidden;
-    }
+    .chat-col.customer-col { padding-left: 18px; }
+    .chat-col.agent-col    { padding-right: 18px; }
 
     .chat-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
       font-size: 12px;
       font-weight: 500;
       letter-spacing: 0.1em;
@@ -241,6 +237,13 @@
       color: var(--muted);
       margin-bottom: 12px;
       flex-shrink: 0;
+    }
+
+    .chat-heading .heading-sub {
+      letter-spacing: 0.04em;
+      text-transform: none;
+      font-weight: 400;
+      font-size: 11px;
     }
 
     /* ── Chat container ── */
@@ -510,8 +513,166 @@
 
     .btn-send:disabled { opacity: 0.4; cursor: not-allowed; }
 
+    /* ── Agent panel ── */
+    .agent-empty {
+      margin: auto;
+      max-width: 280px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .agent-msg {
+      align-self: stretch;
+      background: var(--bot-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      animation: fadeIn 200ms ease;
+    }
+
+    .agent-msg-header {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .agent-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .agent-field {
+      display: flex;
+      gap: 8px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .agent-field-key {
+      flex-shrink: 0;
+      width: 70px;
+      color: var(--muted);
+    }
+
+    .agent-field-val {
+      flex: 1;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .agent-draft {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .agent-draft-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .agent-draft-body {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+
+    .agent-commands {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .agent-commands.done .agent-cmd {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .agent-cmd-row {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .agent-cmd {
+      font-family: monospace;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 7px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 120ms, color 120ms;
+    }
+
+    .agent-cmd:hover {
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    .agent-cmd-desc { margin-left: 7px; }
+
+    .agent-note {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+      border-left: 2px solid var(--text);
+      border-radius: 4px;
+      padding: 8px 12px;
+    }
+
+    .agent-ack {
+      align-self: stretch;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 11px 14px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      animation: fadeIn 200ms ease;
+    }
+
+    .agent-ack-body {
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--text);
+      white-space: pre-line;
+    }
+
+    .agent-footer {
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+    }
+
+    .n8n-link {
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .n8n-link:hover { color: var(--text); }
+
     /* ── Mobile ── */
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       html, body { overflow: auto; }
 
       .shell {
@@ -519,6 +680,7 @@
         height: auto;
         min-height: 100vh;
         overflow: visible;
+        max-width: 560px;
       }
 
       .left-panel {
@@ -531,11 +693,14 @@
 
       .demo-note { margin-top: 0; }
 
-      .right-panel {
+      .chat-col {
         flex: none;
+        height: 86svh;
         padding: 16px;
-        height: 100svh;
       }
+
+      .chat-col.customer-col,
+      .chat-col.agent-col { padding: 16px; }
 
       .chat-messages { min-height: 0; }
     }
@@ -620,23 +785,35 @@
 
   </aside>
 
-  <!-- ── Right panel ── -->
-  <main class="right-panel">
-    <div class="right-inner">
-      <div class="chat-heading">Live Demo</div>
-      <div class="chat-container">
-        <div class="chat-messages" id="chatMessages"></div>
-        <div class="input-bar">
-          <textarea
-            id="msgInput"
-            rows="1"
-            placeholder="Ask me about BOLDR's features…"
-          ></textarea>
-          <button class="btn-send" id="sendBtn">Send</button>
-        </div>
+  <!-- ── Customer chat ── -->
+  <section class="chat-col customer-col">
+    <div class="chat-heading">
+      Customer Chat
+      <span class="heading-sub">What the customer sees</span>
+    </div>
+    <div class="chat-container">
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="input-bar">
+        <textarea
+          id="msgInput"
+          rows="1"
+          placeholder="Ask me about BOLDR's features…"
+        ></textarea>
+        <button class="btn-send" id="sendBtn">Send</button>
       </div>
     </div>
-  </main>
+  </section>
+
+  <!-- ── Agent chat ── -->
+  <section class="chat-col agent-col">
+    <div class="chat-heading">
+      Agent View
+      <span class="heading-sub">Telegram · routed by n8n</span>
+    </div>
+    <div class="chat-container">
+      <div class="chat-messages" id="agentMessages"></div>
+    </div>
+  </section>
 
 </div>
 
@@ -644,15 +821,18 @@
   // ── Config — swap these out before deploying ────────────────────────────────
   const N8N_WEBHOOK_URL = 'https://tejasdotchavan.app.n8n.cloud/webhook/boldr-chat';
   const N8N_POLL_URL    = 'https://tejasdotchavan.app.n8n.cloud/webhook/boldr-poll';
+  const N8N_APPROVE_URL = 'https://tejasdotchavan.app.n8n.cloud/webhook/boldr-approve';
+  const N8N_REJECT_URL  = 'https://tejasdotchavan.app.n8n.cloud/webhook/boldr-reject';
   // ───────────────────────────────────────────────────────────────────────────
 
   const POLL_INTERVAL_MS  = 5000;
   const POLL_MAX_ATTEMPTS = 60;
   const SEND_TIMEOUT_MS   = 15000;
 
-  const chatMessages = document.getElementById('chatMessages');
-  const msgInput     = document.getElementById('msgInput');
-  const sendBtn      = document.getElementById('sendBtn');
+  const chatMessages  = document.getElementById('chatMessages');
+  const agentMessages = document.getElementById('agentMessages');
+  const msgInput      = document.getElementById('msgInput');
+  const sendBtn       = document.getElementById('sendBtn');
 
   let sessionId     = null;
   let pollTimer     = null;
@@ -664,61 +844,73 @@
   const DEMO_MODE = new URLSearchParams(location.search).get('demo') === 'true';
 
   const DEMO_SCRIPT = {
-    kb:         { reply: 'BOLDR is an AI-powered customer support platform that combines a knowledge-base-trained AI with seamless human escalation. It handles common queries instantly and routes complex ones to your CS team — all without the customer noticing the handoff.' },
-    escalation: { reply: "Great question — that's outside what I can answer right now. A customer success agent will follow up shortly with a detailed response.", session_id: 'demo-session-001' },
-    resolved:   { reply: "Hi there! This is Alex from the BOLDR customer success team. To answer your question: BOLDR's enterprise plan includes SSO, custom data retention policies, a dedicated onboarding manager, and SLA-backed uptime guarantees. Happy to set up a call if you'd like a full walkthrough!" }
+    draft: {
+      ticketId: '47OFJN',
+      customer: 'Tejas',
+      draftReply: "Hi Tejas, thanks for reaching out! Happy to help with that. We are currently exploring partnerships with sustainable logistics providers and will update customers as soon as carbon-neutral or offset shipping becomes available. If this is important to you, we recommend checking back with us or reaching out to support@boldr.co to be notified when this option launches."
+    },
+    escalation: {
+      reply: "Great question — that's outside what I can answer right now. A customer success agent will follow up shortly with a detailed response.",
+      customer: 'Tejas'
+    },
+    resolved: {
+      reply: "Hi there! This is Alex from the BOLDR customer success team. To answer your question: BOLDR's enterprise plan includes SSO, custom data retention policies, a dedicated onboarding manager, and SLA-backed uptime guarantees. Happy to set up a call if you'd like a full walkthrough!"
+    }
   };
 
   let demoMsgCount = 0;
 
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
   function generateSessionId() { return `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`; }
   function formatTime(d) { return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
   function scrollToBottom() { chatMessages.scrollTop = chatMessages.scrollHeight; }
+  function agentScrollToBottom() { agentMessages.scrollTop = agentMessages.scrollHeight; }
+
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+
   function setInputState(disabled) {
     awaitingReply = disabled;
     msgInput.disabled = disabled || sessionEnded;
     sendBtn.disabled  = disabled || sessionEnded;
   }
 
+  // ── Customer chat ──────────────────────────────────────────────────────────
   function appendUserMessage(text) {
     const g = document.createElement('div');
     g.className = 'msg-group';
     g.style.alignItems = 'flex-end';
-    const b = document.createElement('div');
-    b.className = 'bubble user';
-    b.textContent = text;
-    const ts = document.createElement('div');
-    ts.className = 'timestamp right';
-    ts.textContent = formatTime(new Date());
+    const b = el('div', 'bubble user', text);
+    const ts = el('div', 'timestamp right', formatTime(new Date()));
     g.appendChild(b); g.appendChild(ts);
     chatMessages.appendChild(g);
     scrollToBottom();
   }
 
   function showTypingIndicator() {
-    const el = document.createElement('div');
-    el.className = 'typing-indicator';
-    el.id = 'typingIndicator';
-    el.innerHTML = '<span></span><span></span><span></span>';
-    chatMessages.appendChild(el);
+    const elx = document.createElement('div');
+    elx.className = 'typing-indicator';
+    elx.id = 'typingIndicator';
+    elx.innerHTML = '<span></span><span></span><span></span>';
+    chatMessages.appendChild(elx);
     scrollToBottom();
   }
 
   function removeTypingIndicator() {
-    const el = document.getElementById('typingIndicator');
-    if (el) el.remove();
+    const elx = document.getElementById('typingIndicator');
+    if (elx) elx.remove();
   }
 
   function appendBotMessage(text) {
     const g = document.createElement('div');
     g.className = 'msg-group';
     g.style.alignItems = 'flex-start';
-    const b = document.createElement('div');
-    b.className = 'bubble bot';
-    b.textContent = text;
-    const ts = document.createElement('div');
-    ts.className = 'timestamp left';
-    ts.textContent = formatTime(new Date());
+    const b = el('div', 'bubble bot', text);
+    const ts = el('div', 'timestamp left', formatTime(new Date()));
     g.appendChild(b); g.appendChild(ts);
     chatMessages.appendChild(g);
     scrollToBottom();
@@ -727,27 +919,23 @@
   function appendCSMessage(text) {
     const w = document.createElement('div');
     w.className = 'cs-wrapper';
-    const lbl = document.createElement('div');
-    lbl.className = 'cs-label';
-    lbl.textContent = 'CS Agent';
-    const b = document.createElement('div');
-    b.className = 'bubble cs';
-    b.textContent = text;
-    const ts = document.createElement('div');
-    ts.className = 'timestamp left';
-    ts.textContent = formatTime(new Date());
+    const lbl = el('div', 'cs-label', 'CS Agent');
+    const b = el('div', 'bubble cs', text);
+    const ts = el('div', 'timestamp left', formatTime(new Date()));
     w.appendChild(lbl); w.appendChild(b); w.appendChild(ts);
     chatMessages.appendChild(w);
     scrollToBottom();
   }
 
-  function showWaitingIndicator() {
-    const el = document.createElement('div');
-    el.className = 'waiting-indicator';
-    el.innerHTML = '<div class="waiting-dot"></div><div class="waiting-text">Waiting for your CS agent…</div>';
-    chatMessages.appendChild(el);
+  function showWaitingIndicator(text) {
+    removeWaitingIndicator();
+    const wrap = document.createElement('div');
+    wrap.className = 'waiting-indicator';
+    wrap.appendChild(el('div', 'waiting-dot'));
+    wrap.appendChild(el('div', 'waiting-text', text || 'Waiting for your CS agent…'));
+    chatMessages.appendChild(wrap);
     scrollToBottom();
-    waitingEl = el;
+    waitingEl = wrap;
   }
 
   function removeWaitingIndicator() {
@@ -755,10 +943,7 @@
   }
 
   function showError(msg) {
-    const el = document.createElement('div');
-    el.className = 'error-msg';
-    el.textContent = msg;
-    chatMessages.appendChild(el);
+    chatMessages.appendChild(el('div', 'error-msg', msg));
     scrollToBottom();
   }
 
@@ -769,20 +954,165 @@
     sendBtn.disabled  = true;
     const end = document.createElement('div');
     end.className = 'session-end';
-    const div = document.createElement('div');
-    div.className = 'session-divider';
-    const note = document.createElement('div');
-    note.className = 'session-notice';
-    note.textContent = "This session is complete. This demo covers a limited scope of BOLDR's functionality.";
-    const btn = document.createElement('button');
-    btn.className = 'btn-new-session';
-    btn.textContent = 'Start New Session';
+    const note = el('div', 'session-notice',
+      "This session is complete. This demo covers a limited scope of BOLDR's functionality.");
+    const btn = el('button', 'btn-new-session', 'Start New Session');
     btn.onclick = () => window.location.reload();
-    end.appendChild(div); end.appendChild(note); end.appendChild(btn);
+    end.appendChild(el('div', 'session-divider'));
+    end.appendChild(note);
+    end.appendChild(btn);
     chatMessages.appendChild(end);
     scrollToBottom();
   }
 
+  // ── Agent chat ─────────────────────────────────────────────────────────────
+  function showAgentEmpty() {
+    const e = el('div', 'agent-empty',
+      'Agent inbox. Drafts awaiting approval and unresolved tickets routed from n8n appear here once a customer sends a message.');
+    e.id = 'agentEmpty';
+    agentMessages.appendChild(e);
+  }
+
+  function agentClearEmpty() {
+    const e = document.getElementById('agentEmpty');
+    if (e) e.remove();
+  }
+
+  function agentField(key, val) {
+    const f = el('div', 'agent-field');
+    f.appendChild(el('span', 'agent-field-key', key));
+    f.appendChild(el('span', 'agent-field-val', val));
+    return f;
+  }
+
+  function agentFooter() {
+    const f = el('div', 'agent-footer');
+    f.appendChild(document.createTextNode('Sent automatically with '));
+    const a = el('a', 'n8n-link', 'n8n');
+    a.href = 'https://n8n.io';
+    a.target = '_blank';
+    a.rel = 'noopener';
+    f.appendChild(a);
+    f.appendChild(document.createTextNode(' · ' + formatTime(new Date())));
+    return f;
+  }
+
+  function commandLink(action, ticketId, desc) {
+    const row = el('div', 'agent-cmd-row');
+    const link = el('a', 'agent-cmd ' + action, '/' + action + ticketId);
+    link.href = '#';
+    row.appendChild(link);
+    row.appendChild(el('span', 'agent-cmd-desc', desc));
+    return { row, link };
+  }
+
+  function appendAgentDraft(d) {
+    agentClearEmpty();
+    const msg = el('div', 'agent-msg');
+    msg.appendChild(el('div', 'agent-msg-header', '✅ Draft ready for approval'));
+
+    const fields = el('div', 'agent-fields');
+    fields.appendChild(agentField('ID', d.ticketId));
+    fields.appendChild(agentField('Customer', d.customer));
+    fields.appendChild(agentField('Question', d.question));
+    msg.appendChild(fields);
+
+    const draft = el('div', 'agent-draft');
+    draft.appendChild(el('div', 'agent-draft-label', 'Draft reply'));
+    draft.appendChild(el('div', 'agent-draft-body', d.draftReply));
+    msg.appendChild(draft);
+
+    const cmds = el('div', 'agent-commands');
+    const approve = commandLink('approve', d.ticketId, '— send to customer');
+    const reject  = commandLink('reject',  d.ticketId, '— log to CS queue');
+    cmds.appendChild(approve.row);
+    cmds.appendChild(reject.row);
+    msg.appendChild(cmds);
+
+    msg.appendChild(agentFooter());
+    agentMessages.appendChild(msg);
+    agentScrollToBottom();
+
+    approve.link.addEventListener('click', e => { e.preventDefault(); handleApprove(d, cmds); });
+    reject.link.addEventListener('click',  e => { e.preventDefault(); handleReject(d, cmds); });
+  }
+
+  function appendAgentTicket(d) {
+    agentClearEmpty();
+    const msg = el('div', 'agent-msg');
+    msg.appendChild(el('div', 'agent-msg-header', '🚨 Unresolved ticket'));
+
+    const fields = el('div', 'agent-fields');
+    fields.appendChild(agentField('ID', d.ticketId));
+    fields.appendChild(agentField('Customer', d.customer));
+    fields.appendChild(agentField('Question', d.question));
+    msg.appendChild(fields);
+
+    msg.appendChild(el('div', 'agent-note',
+      'Fill in cs_answer in the Google Sheet and set status to answered.'));
+    msg.appendChild(agentFooter());
+    agentMessages.appendChild(msg);
+    agentScrollToBottom();
+  }
+
+  function appendAgentAck(text) {
+    agentClearEmpty();
+    const msg = el('div', 'agent-ack');
+    msg.appendChild(el('div', 'agent-ack-body', text));
+    msg.appendChild(agentFooter());
+    agentMessages.appendChild(msg);
+    agentScrollToBottom();
+  }
+
+  // ── Approve / reject ───────────────────────────────────────────────────────
+  function deliverApprovedReply(reply) {
+    removeWaitingIndicator();
+    appendBotMessage(reply);
+    setInputState(false);
+  }
+
+  async function handleApprove(d, cmds) {
+    cmds.classList.add('done');
+    if (DEMO_MODE) {
+      deliverApprovedReply(d.draftReply);
+      appendAgentAck('✅ Reply approved and delivered to the customer. Ticket ' + d.ticketId + ' closed.');
+      return;
+    }
+    try {
+      const res = await fetch(
+        `${N8N_APPROVE_URL}?id=${encodeURIComponent(d.ticketId)}&session_id=${encodeURIComponent(d.sessionId)}`);
+      if (!res.ok) throw new Error('bad status');
+      let reply = d.draftReply;
+      try { const j = await res.json(); if (j && j.reply) reply = j.reply; } catch { /* keep draft */ }
+      deliverApprovedReply(reply);
+      appendAgentAck('✅ Reply approved and delivered to the customer. Ticket ' + d.ticketId + ' closed.');
+    } catch {
+      cmds.classList.remove('done');
+      appendAgentAck("⚠️ Couldn't reach n8n — the approval didn't go through. Please try again.");
+    }
+  }
+
+  async function handleReject(d, cmds) {
+    cmds.classList.add('done');
+    if (!DEMO_MODE) {
+      try {
+        const res = await fetch(
+          `${N8N_REJECT_URL}?id=${encodeURIComponent(d.ticketId)}&session_id=${encodeURIComponent(d.sessionId)}`);
+        if (!res.ok) throw new Error('bad status');
+      } catch {
+        cmds.classList.remove('done');
+        appendAgentAck("⚠️ Couldn't reach n8n — the rejection didn't go through. Please try again.");
+        return;
+      }
+    }
+    appendAgentAck('↩️ Draft rejected. Ticket ' + d.ticketId + ' logged to the CS queue for manual handling.');
+    removeWaitingIndicator();
+    appendBotMessage("Thanks for your patience — I've passed this to our customer success team and they'll follow up shortly.");
+    appendAgentTicket({ ticketId: d.ticketId, customer: d.customer, question: d.question });
+    startPolling(d.sessionId);
+  }
+
+  // ── Polling (KB miss + post-reject CS flow) ────────────────────────────────
   async function pollForAnswer(sid) {
     pollAttempts++;
     if (pollAttempts > POLL_MAX_ATTEMPTS) {
@@ -815,10 +1145,11 @@
 
   function startPolling(sid) {
     pollAttempts = 0;
-    showWaitingIndicator();
+    showWaitingIndicator('Waiting for your CS agent…');
     pollTimer = setInterval(() => pollForAnswer(sid), POLL_INTERVAL_MS);
   }
 
+  // ── Send ───────────────────────────────────────────────────────────────────
   async function sendMessage() {
     const text = msgInput.value.trim();
     if (!text || awaitingReply || sessionEnded) return;
@@ -829,17 +1160,28 @@
     showTypingIndicator();
 
     if (DEMO_MODE) {
-      await new Promise(r => setTimeout(r, 1200));
+      await sleep(1200);
       removeTypingIndicator();
       demoMsgCount++;
       if (demoMsgCount === 1) {
-        appendBotMessage(DEMO_SCRIPT.kb.reply);
-        setInputState(false);
+        // KB hit — draft routed to the agent for approval
+        appendAgentDraft({
+          ticketId:   DEMO_SCRIPT.draft.ticketId,
+          customer:   DEMO_SCRIPT.draft.customer,
+          question:   text,
+          draftReply: DEMO_SCRIPT.draft.draftReply,
+          sessionId:  'demo-' + generateSessionId()
+        });
+        showWaitingIndicator('Waiting for an agent to approve the reply…');
       } else {
-        sessionId = DEMO_SCRIPT.escalation.session_id;
+        // KB miss — unresolved ticket routed to the agent
         appendBotMessage(DEMO_SCRIPT.escalation.reply);
-        setInputState(false);
-        startPolling(sessionId);
+        appendAgentTicket({
+          ticketId: new Date().toISOString(),
+          customer: DEMO_SCRIPT.escalation.customer,
+          question: text
+        });
+        startPolling('demo-session');
       }
       return;
     }
@@ -858,18 +1200,41 @@
       removeTypingIndicator();
       if (!res.ok) { showError('Something went wrong — please try again.'); setInputState(false); return; }
       const data = await res.json();
-      if (data.type === 'answer') {
-        appendBotMessage(data.reply); setInputState(false);
+
+      if (data.type === 'draft') {
+        // KB hit — draft routed to the agent; customer waits for approval
+        appendAgentDraft({
+          ticketId:   data.ticket_id,
+          customer:   data.customer || 'Customer',
+          question:   data.question || text,
+          draftReply: data.draft_reply,
+          sessionId:  data.session_id || clientSid
+        });
+        showWaitingIndicator('Waiting for an agent to approve the reply…');
+      } else if (data.type === 'answer') {
+        // Direct KB answer (no approval gate)
+        appendBotMessage(data.reply);
+        setInputState(false);
       } else if (data.type === 'escalation') {
+        // KB miss — unresolved ticket routed to the agent
         sessionId = data.session_id || clientSid;
-        appendBotMessage(data.reply); setInputState(false); startPolling(sessionId);
+        appendBotMessage(data.reply);
+        appendAgentTicket({
+          ticketId: data.ticket_id || sessionId,
+          customer: data.customer || 'Customer',
+          question: data.question || text
+        });
+        startPolling(sessionId);
       } else {
-        showError('Received an unexpected response format.'); setInputState(false);
+        showError('Received an unexpected response format.');
+        setInputState(false);
       }
     } catch (err) {
       clearTimeout(timeout);
       removeTypingIndicator();
-      showError(err.name === 'AbortError' ? 'Request timed out — please try again.' : 'Something went wrong — please try again.');
+      showError(err.name === 'AbortError'
+        ? 'Request timed out — please try again.'
+        : 'Something went wrong — please try again.');
       setInputState(false);
     }
   }
@@ -887,6 +1252,7 @@
 
   (function init() {
     appendBotMessage("Hi! I'm BOLDR's AI support assistant. Ask me anything about BOLDR, or try a question about our features, pricing, or integrations.");
+    showAgentEmpty();
   })();
 </script>
 
