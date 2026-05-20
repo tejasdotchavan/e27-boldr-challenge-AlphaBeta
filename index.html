@@ -15,6 +15,7 @@
       --text: #0a0a0a;
       --muted: #888888;
       --border: #e5e5e5;
+      --accent: #e0501a;
       --surface: #f5f5f5;
       --user-bg: #0a0a0a;
       --user-text: #ffffff;
@@ -172,6 +173,38 @@
       white-space: nowrap;
     }
     .btn-fetch:hover { opacity: 0.75; }
+
+    /* ── Brand row + watch clock ── */
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-width: 0;
+    }
+    .brand-row > div:first-child { min-width: 0; flex: 1; }
+    .watch-clock {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .watch-face {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #f7f7f7;
+      border: 4px solid #b8b8b8;
+      box-shadow: 0 0 0 1px #d8d8d8, inset 0 1px 3px rgba(0,0,0,0.07);
+    }
+    .watch-face svg { width: 100%; height: 100%; overflow: visible; }
+    .watch-time-text {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--lp-muted);
+      letter-spacing: 0.06em;
+    }
 
     /* ── Chat container (guest) ── */
     .chat-container {
@@ -452,9 +485,24 @@
 
   <!-- ── Left panel ── -->
   <aside class="left-panel">
-    <div>
-      <div class="wordmark">BOLDR</div>
-      <div class="tagline">AI-powered support, always on.</div>
+    <div class="brand-row">
+      <div>
+        <div class="wordmark">BOLDR</div>
+        <div class="tagline">AI-powered support, always on.</div>
+      </div>
+      <div class="watch-clock">
+        <div class="watch-face">
+          <svg id="watchSvg" viewBox="0 0 100 100">
+            <g id="ticks"></g>
+            <line id="hourHand"   x1="50" y1="56" x2="50" y2="30" stroke="#2a2a2a" stroke-width="4" stroke-linecap="round"/>
+            <line id="minuteHand" x1="50" y1="58" x2="50" y2="20" stroke="#2a2a2a" stroke-width="2.5" stroke-linecap="round"/>
+            <line id="secondStem" x1="50" y1="62" x2="50" y2="17" stroke="#e0501a" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="50" cy="50" r="3.5" fill="#2a2a2a"/>
+            <circle cx="50" cy="50" r="1.8" fill="#e0501a"/>
+          </svg>
+        </div>
+        <span class="watch-time-text" id="watchTimeText"></span>
+      </div>
     </div>
 
     <div class="info-section">
@@ -987,6 +1035,55 @@
     msgInput.style.height = Math.min(msgInput.scrollHeight, 76) + 'px';
   });
   // ── Init ──────────────────────────────────────────────────────────────────────
+  // ── Watch clock ──────────────────────────────────────────────────────────────
+  (function initClock() {
+    const ticksG   = document.getElementById('ticks');
+    const hourHand = document.getElementById('hourHand');
+    const minHand  = document.getElementById('minuteHand');
+    const secStem  = document.getElementById('secondStem');
+    const timeText = document.getElementById('watchTimeText');
+
+    // Draw 60 tick marks around the dial
+    for (let i = 0; i < 60; i++) {
+      const isMajor = i % 5 === 0;
+      const angle = (i / 60) * 360;
+      const r1 = isMajor ? 41 : 44;
+      const rad = (angle - 90) * Math.PI / 180;
+      const x1 = 50 + r1 * Math.cos(rad),       y1 = 50 + r1 * Math.sin(rad);
+      const x2 = 50 + 47 * Math.cos(rad),        y2 = 50 + 47 * Math.sin(rad);
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+      line.setAttribute('stroke', isMajor ? '#444' : '#ccc');
+      line.setAttribute('stroke-width', isMajor ? '2' : '0.8');
+      line.setAttribute('stroke-linecap', 'round');
+      ticksG.appendChild(line);
+    }
+
+    function rotate(el, deg) {
+      el.setAttribute('transform', `rotate(${deg}, 50, 50)`);
+    }
+
+    function tick() {
+      const now = new Date();
+      const s = now.getSeconds();
+      const m = now.getMinutes() + s / 60;
+      const h = (now.getHours() % 12) + m / 60;
+
+      rotate(hourHand, h / 12 * 360);
+      rotate(minHand,  m / 60 * 360);
+      rotate(secStem,  s / 60 * 360);
+
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      timeText.textContent = `${hh}:${mm}:${ss}`;
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  })();
+
   (function init() {
     appendBotMsg("Hi! I'm BOLDR's AI support assistant. Ask me anything about BOLDR, or try a question about our features, pricing, or integrations.");
     startPolling();
