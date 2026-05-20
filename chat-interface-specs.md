@@ -5,7 +5,7 @@
 
 ## 1. Purpose & Context
 
-A lightweight, single-page chat interface hosted on GitHub Pages. Intended for competition judges to experience BOLDR's AI-powered customer support flow firsthand. The interface connects to an n8n workflow via webhook and demonstrates two key behaviours: instant AI responses from a knowledge base, and an asynchronous CS escalation flow where a second reply arrives after a human agent updates the record.
+A lightweight, single-page interface hosted on GitHub Pages. Intended for competition judges to experience BOLDR's AI-powered customer support flow firsthand. The page shows **two side-by-side chat windows**: a **Customer Chat** (what the customer sees) and an **Agent View** (what the human agent sees in Telegram, routed by n8n). The interface connects to an n8n workflow via webhook and demonstrates two key behaviours: an AI **draft-approval** flow where a knowledge-base answer is reviewed by a human agent before it reaches the customer, and an asynchronous **CS escalation** flow where the answer arrives after a human agent updates a record.
 
 ---
 
@@ -18,18 +18,22 @@ A lightweight, single-page chat interface hosted on GitHub Pages. Intended for c
 - Response is displayed as a bot reply in the chat window.
 - Chat history persists in-memory for the duration of the session (no localStorage).
 
-### 2.2 KB hit — standard reply
+### 2.2 KB hit — draft approval flow
 
-- n8n finds an answer in the knowledge base.
-- Single reply is returned synchronously in the HTTP response.
-- Reply appears in the chat within the normal response time.
+- n8n finds an answer in the knowledge base and generates a **draft reply**.
+- The HTTP response returns a `draft` payload (`ticket_id`, `customer`, `question`, `draft_reply`) — **not** a customer-facing answer.
+- The Customer Chat shows a "waiting for an agent to approve the reply" indicator and the input bar is disabled.
+- The draft is mirrored into the **Agent View** panel as a "Draft ready for approval" message with `/approve` and `/reject` commands.
+- On **approve** — the agent panel calls the approve endpoint; the draft reply is delivered to the Customer Chat as a bot message, an acknowledgement appears in the Agent View, and the input bar re-enables (the session continues).
+- On **reject** — the agent panel calls the reject endpoint; the draft is logged to the CS queue, the customer is told a CS agent will follow up, an "Unresolved ticket" appears in the Agent View, and the flow falls through to the async CS escalation polling (section 2.3).
 
 ### 2.3 KB miss — async CS escalation (two-message flow)
 
 **Step 1 — Instant acknowledgement**
 - n8n does not find an answer in the KB.
-- HTTP response returns: a "CS escalation" reply (e.g. "Great question — a customer success agent will follow up shortly.") plus a unique `session_id`.
-- Chat UI displays this reply and stores the `session_id`.
+- HTTP response returns: an `escalation` reply (e.g. "Great question — a customer success agent will follow up shortly."), a unique `session_id`, and ticket fields (`ticket_id`, `customer`, `question`).
+- Customer Chat displays the reply and stores the `session_id`.
+- An "Unresolved ticket" notification is mirrored into the **Agent View** panel.
 - UI enters a **polling state**: a subtle "waiting for CS..." indicator appears under the last bot message.
 
 **Step 2 — CS updates Google Sheets**
@@ -58,11 +62,19 @@ A lightweight, single-page chat interface hosted on GitHub Pages. Intended for c
 
 ### 3.1 Layout
 
-- Full-height, full-width single page. No navigation, no sidebar.
-- Centred chat column, max-width 680px, with padding on either side.
-- Header: BOLDR logo/wordmark + tagline (e.g. "AI-powered support, always on.").
-- Chat window takes up the majority of vertical space.
-- Input bar pinned to the bottom of the chat column.
+- Full-height single page, three columns inside a centred shell (max-width ~1560px).
+- **Left panel** — BOLDR wordmark + tagline, competition/team info, resource links, demo note.
+- **Customer Chat column** — the conversation the customer drives; input bar pinned to the bottom.
+- **Agent View column** — read-only mirror of what the human agent sees in Telegram (drafts to approve/reject, unresolved tickets, acknowledgements). No input bar.
+- Below 900px the three columns stack vertically.
+
+### 3.1a Agent View panel
+
+- Messages render as structured cards (not chat bubbles), mirroring the Telegram bot messages.
+- **Draft card** — "✅ Draft ready for approval" header, `ID` / `Customer` / `Question` fields, a boxed draft reply, and `/approve{id}` `/reject{id}` command links, followed by an "Sent automatically with n8n" footer. Commands dim once actioned.
+- **Unresolved ticket card** — "🚨 Unresolved ticket" header, `ID` / `Customer` / `Question` fields, and a note to fill `cs_answer` in the Google Sheet.
+- **Acknowledgement card** — confirmation text after an approve/reject, with the n8n footer.
+- `/approve` and `/reject` are command-styled links that trigger a background `fetch` to the n8n approve/reject endpoints and update both panels in place — no page navigation.
 
 ### 3.2 Visual style
 
@@ -143,7 +155,7 @@ A lightweight, single-page chat interface hosted on GitHub Pages. Intended for c
 
 - Pure static HTML/CSS/JS — no build step, no framework dependencies.
 - Hosted on GitHub Pages (single `index.html` file).
-- Webhook URL and polling URL stored as constants at the top of the JS file for easy swap-out.
+- Webhook, polling, approve and reject URLs stored as constants at the top of the JS file for easy swap-out (`N8N_WEBHOOK_URL`, `N8N_POLL_URL`, `N8N_APPROVE_URL`, `N8N_REJECT_URL`).
 
 ### 4.2 n8n Webhook — initial message
 
@@ -157,24 +169,49 @@ Content-Type: application/json
 }
 ```
 
-**Response — KB hit:**
+**Response — KB hit (draft for approval):**
 ```json
 {
-  "type": "answer",
-  "reply": "string"
+  "type": "draft",
+  "ticket_id": "string",     // short ID shown to the agent, e.g. "47OFJN"
+  "customer": "string",      // customer name/handle
+  "question": "string",      // the customer's question
+  "draft_reply": "string",   // AI-generated reply pending agent approval
+  "session_id": "string"     // used by the approve/reject endpoints
 }
 ```
+
+> A `{ "type": "answer", "reply": "string" }` response is still accepted as a direct
+> reply with no approval gate (backwards-compatible / optional fast path).
 
 **Response — KB miss (escalation):**
 ```json
 {
   "type": "escalation",
   "reply": "string",        // the "CS will get back to you" message
-  "session_id": "string"    // echoed back or reassigned by n8n
+  "session_id": "string",   // echoed back or reassigned by n8n
+  "ticket_id": "string",    // ID shown in the Agent View (ISO timestamp is fine)
+  "customer": "string",
+  "question": "string"
 }
 ```
 
-### 4.3 n8n Polling Endpoint
+### 4.3 n8n Approve / Reject Endpoints
+
+Triggered when the agent clicks `/approve{id}` or `/reject{id}` in the Agent View.
+
+```
+GET {N8N_APPROVE_URL}?id={ticket_id}&session_id={session_id}
+GET {N8N_REJECT_URL}?id={ticket_id}&session_id={session_id}
+```
+
+- **Approve** — n8n marks the ticket sent. The response may optionally return
+  `{ "reply": "string" }` to override the delivered text; otherwise the `draft_reply`
+  already held by the UI is used.
+- **Reject** — n8n logs the ticket to the CS queue keyed by `session_id`, so the
+  customer's subsequent poll (section 4.4) resolves once CS answers.
+
+### 4.4 n8n Polling Endpoint
 
 ```
 GET {N8N_POLL_URL}?session_id={session_id}
@@ -193,7 +230,7 @@ GET {N8N_POLL_URL}?session_id={session_id}
 }
 ```
 
-### 4.4 Google Sheets schema
+### 4.5 Google Sheets schema
 
 | Column | Value |
 |---|---|
@@ -203,7 +240,7 @@ GET {N8N_POLL_URL}?session_id={session_id}
 | `answer` | Filled in by CS agent |
 | `status` | `pending` / `resolved` |
 
-### 4.5 Polling behaviour
+### 4.6 Polling behaviour
 
 - Polling interval: 5 seconds.
 - Max polling duration: 5 minutes (60 attempts), then show fallback message and stop.

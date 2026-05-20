@@ -1,0 +1,224 @@
+{
+  "name": "BOLDR — 1. Chat Webhook",
+  "versionId": "a1000000-0000-4000-8000-000000000001",
+  "nodes": [
+    {
+      "id": "a1000001-0000-4000-8000-000000000001",
+      "name": "Incoming Message",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [140, 300],
+      "webhookId": "a1000001-0000-4000-8000-000000000011",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "boldr-chat",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "a1000002-0000-4000-8000-000000000001",
+      "name": "Prepare Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [360, 300],
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\nconst message    = body.message    || '';\nconst session_id = body.session_id || '';\nconst ticket_id  = Math.random().toString(36).slice(2, 8).toUpperCase();\nconst customer   = body.customer   || 'Web User';\nconst timestamp  = new Date().toISOString();\nreturn [{ json: { message, session_id, ticket_id, customer, timestamp } }];"
+      }
+    },
+    {
+      "id": "a1000003-0000-4000-8000-000000000001",
+      "name": "KB Check — FPT AI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [580, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "REPLACE_WITH_FPTAI_ENDPOINT",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyContentType": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'Qwen3-32B', messages: [ { role: 'system', content: 'You are BOLDR\\'s AI customer support assistant.\\n\\n--- KNOWLEDGE BASE ---\\n[PASTE YOUR BOLDR KB HERE — product info, FAQs, shipping policy, returns, pricing, etc.]\\n--- END KB ---\\n\\nRules:\\n• Reply ONLY with a single valid JSON object — no text outside it.\\n• If you can answer from the KB: {\"answerable\": true, \"draft\": \"your warm 2–4 sentence reply\"}\\n• If the question is outside the KB: {\"answerable\": false, \"draft\": null}\\n• Never invent information not in the KB.' }, { role: 'user', content: $json.message } ], max_tokens: 500 }) }}"
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_FPTAI_CREDENTIAL_ID",
+          "name": "FPT AI API Key"
+        }
+      }
+    },
+    {
+      "id": "a1000004-0000-4000-8000-000000000001",
+      "name": "Parse AI Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [800, 300],
+      "parameters": {
+        "jsCode": "const prev = $('Prepare Data').first().json;\nconst aiNode = $input.first().json;\nconst raw = aiNode.output || aiNode.text || aiNode.message || aiNode.response || aiNode.choices?.[0]?.message?.content || '';\nconst noThink = raw.replace(/<think>[\\s\\S]*?<\\/think>/gi, '').trim();\nconst cleaned = noThink.replace(/```json\\s*/gi, '').replace(/```\\s*/gi, '').trim();\nlet ai = { kb_match: 'no', classification: 'out_of_scope', confidence_score: 0, draft_reply: '' };\ntry { ai = JSON.parse(cleaned); } catch(e) {\n  const match = cleaned.match(/\\{[\\s\\S]*\\}/);\n  if (match) { try { ai = JSON.parse(match[0]); } catch(e2) {} }\n}\nconst answerable = ai.kb_match === 'yes' || (ai.classification !== 'out_of_scope' && (ai.confidence_score || 0) >= 0.5);\nreturn [{ json: {\n  message:          prev.message,\n  session_id:       prev.session_id,\n  ticket_id:        prev.ticket_id,\n  customer:         prev.customer,\n  timestamp:        prev.timestamp,\n  answerable:       answerable,\n  draft_reply:      ai.draft_reply || '',\n  classification:   ai.classification || 'out_of_scope',\n  confidence_score: ai.confidence_score || 0,\n  marketing_flag:   ai.marketing_flag || 'no',\n  marketing_signal: ai.marketing_signal || null\n} }];"
+      }
+    },
+    {
+      "id": "a1000005-0000-4000-8000-000000000001",
+      "name": "KB Hit?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1020, 300],
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": false, "typeValidation": "loose" },
+          "conditions": [
+            {
+              "id": "cond-kb-hit",
+              "leftValue": "={{ $json.answerable }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "equal" }
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "a1000006-0000-4000-8000-000000000001",
+      "name": "Build Draft Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1240, 160],
+      "parameters": {
+        "jsCode": "const d = $input.first().json;\nreturn [{ json: {\n  ticket_id:   d.ticket_id,\n  session_id:  d.session_id,\n  timestamp:   d.timestamp,\n  customer:    d.customer,\n  question:    d.message,\n  draft_reply: d.draft_reply,\n  cs_answer:   '',\n  status:      'draft_pending'\n} }];"
+      }
+    },
+    {
+      "id": "a1000007-0000-4000-8000-000000000001",
+      "name": "Log Draft to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1460, 160],
+      "parameters": {
+        "operation": "append",
+        "documentId": { "__rl": true, "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID", "mode": "id" },
+        "sheetName":  { "__rl": true, "value": "Sheet1", "mode": "name" },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": { "valueInputMode": "USER_ENTERED" }
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "id": "a1000008-0000-4000-8000-000000000001",
+      "name": "Respond — Draft",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1680, 160],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ type: 'draft', ticket_id: $('Parse AI Response').item.json.ticket_id, customer: $('Parse AI Response').item.json.customer, question: $('Parse AI Response').item.json.message, draft_reply: $('Parse AI Response').item.json.draft_reply, session_id: $('Parse AI Response').item.json.session_id }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "a1000009-0000-4000-8000-000000000001",
+      "name": "Build Escalation Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1240, 440],
+      "parameters": {
+        "jsCode": "const d = $input.first().json;\nreturn [{ json: {\n  ticket_id:   d.ticket_id,\n  session_id:  d.session_id,\n  timestamp:   d.timestamp,\n  customer:    d.customer,\n  question:    d.message,\n  draft_reply: '',\n  cs_answer:   '',\n  status:      'cs_pending'\n} }];"
+      }
+    },
+    {
+      "id": "a1000010-0000-4000-8000-000000000001",
+      "name": "Log Escalation to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1460, 440],
+      "parameters": {
+        "operation": "append",
+        "documentId": { "__rl": true, "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID", "mode": "id" },
+        "sheetName":  { "__rl": true, "value": "Sheet1", "mode": "name" },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": { "valueInputMode": "USER_ENTERED" }
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "id": "a1000011-0000-4000-8000-000000000001",
+      "name": "Respond — Escalation",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1680, 440],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ type: 'escalation', reply: \"Thanks for reaching out! That's a great question — one of our customer success team will follow up with you shortly.\", session_id: $('Parse AI Response').item.json.session_id, ticket_id: $('Parse AI Response').item.json.ticket_id, customer: $('Parse AI Response').item.json.customer, question: $('Parse AI Response').item.json.message }) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Incoming Message": {
+      "main": [[{ "node": "Prepare Data", "type": "main", "index": 0 }]]
+    },
+    "Prepare Data": {
+      "main": [[{ "node": "KB Check — OpenAI", "type": "main", "index": 0 }]]
+    },
+    "KB Check — OpenAI": {
+      "main": [[{ "node": "Parse AI Response", "type": "main", "index": 0 }]]
+    },
+    "Parse AI Response": {
+      "main": [[{ "node": "KB Hit?", "type": "main", "index": 0 }]]
+    },
+    "KB Hit?": {
+      "main": [
+        [{ "node": "Build Draft Row", "type": "main", "index": 0 }],
+        [{ "node": "Build Escalation Row", "type": "main", "index": 0 }]
+      ]
+    },
+    "Build Draft Row": {
+      "main": [[{ "node": "Log Draft to Sheets", "type": "main", "index": 0 }]]
+    },
+    "Log Draft to Sheets": {
+      "main": [[{ "node": "Respond — Draft", "type": "main", "index": 0 }]]
+    },
+    "Build Escalation Row": {
+      "main": [[{ "node": "Log Escalation to Sheets", "type": "main", "index": 0 }]]
+    },
+    "Log Escalation to Sheets": {
+      "main": [[{ "node": "Respond — Escalation", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "BOLDR" }]
+}
