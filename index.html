@@ -22,8 +22,6 @@
       --cs-bg: #e8e8e8;
       --page-bg: #ebebeb;
       --font: 'Geist', 'Inter', system-ui, sans-serif;
-
-      /* left panel */
       --lp-bg: #f2f2f2;
       --lp-text: #0a0a0a;
       --lp-muted: #888888;
@@ -43,252 +41,157 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Shell — full viewport, no overflow ── */
+    /* ── Shell ── */
     .shell {
       display: flex;
       height: 100vh;
-      max-width: 1560px;
+      max-width: 1400px;
       margin: 0 auto;
       overflow: hidden;
     }
 
     /* ── Left panel ── */
     .left-panel {
-      width: 320px;
+      width: 260px;
       flex-shrink: 0;
       background: var(--lp-bg);
       color: var(--lp-text);
       display: flex;
       flex-direction: column;
-      padding: 24px 22px;
+      padding: 24px 20px;
       overflow: hidden;
       gap: 22px;
+      border-right: 1px solid var(--lp-border);
     }
 
     .left-panel::-webkit-scrollbar { width: 3px; }
     .left-panel::-webkit-scrollbar-thumb { background: var(--lp-border); border-radius: 3px; }
 
-    .wordmark {
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: -0.4px;
-      color: var(--lp-text);
-    }
+    .wordmark { font-size: 20px; font-weight: 600; letter-spacing: -0.4px; color: var(--lp-text); }
+    .tagline { font-size: 12px; color: var(--lp-muted); margin-top: 4px; }
 
-    .tagline {
-      font-size: 12px;
-      color: var(--lp-muted);
-      margin-top: 4px;
-    }
-
-    .info-section {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    .info-section { display: flex; flex-direction: column; gap: 10px; }
 
     .section-label {
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--lp-muted);
-      margin-bottom: 2px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--lp-muted); margin-bottom: 2px;
     }
 
-    .info-row {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
+    .info-row { display: flex; flex-direction: column; gap: 1px; }
+    .info-key { font-size: 12px; color: var(--lp-muted); }
+    .info-val { font-size: 13px; font-weight: 500; color: var(--lp-text); }
 
-    .info-key {
-      font-size: 12px;
-      color: var(--lp-muted);
-    }
-
-    .info-val {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--lp-text);
-    }
-
-    .team-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .team-member {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .team-list { display: flex; flex-direction: column; gap: 8px; }
+    .team-member { display: flex; align-items: center; gap: 10px; }
 
     .avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--lp-text);
-      color: var(--lp-bg);
-      font-size: 12px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      letter-spacing: 0.02em;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--lp-text); color: var(--lp-bg);
+      font-size: 12px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
 
-    .member-name {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--lp-text);
-    }
+    .member-name { font-size: 13px; font-weight: 500; color: var(--lp-text); }
 
-    .link-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .link-list { display: flex; flex-direction: column; gap: 6px; }
 
     .doc-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      background: var(--lp-surface);
-      border: 1px solid var(--lp-border);
-      border-radius: 10px;
-      text-decoration: none;
-      color: var(--lp-text);
+      display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+      background: var(--lp-surface); border: 1px solid var(--lp-border);
+      border-radius: 10px; text-decoration: none; color: var(--lp-text);
       transition: background 120ms, border-color 120ms;
     }
 
-    .doc-link:hover {
-      background: var(--lp-hover);
-      border-color: #3a3a3a;
-    }
-
-    .doc-link-icon {
-      font-size: 15px;
-      flex-shrink: 0;
-      line-height: 1;
-    }
-
-    .doc-link-body {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-
-    .doc-link-title {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--lp-text);
-    }
-
-    .doc-link-sub {
-      font-size: 12px;
-      color: var(--lp-muted);
-    }
+    .doc-link:hover { background: var(--lp-hover); border-color: #c0c0c0; }
+    .doc-link-icon { font-size: 14px; flex-shrink: 0; line-height: 1; }
+    .doc-link-body { display: flex; flex-direction: column; gap: 1px; }
+    .doc-link-title { font-size: 12px; font-weight: 500; color: var(--lp-text); }
+    .doc-link-sub { font-size: 12px; color: var(--lp-muted); }
 
     .demo-note {
-      margin-top: auto;
-      padding: 10px 12px;
-      background: var(--lp-surface);
-      border: 1px solid var(--lp-border);
-      border-radius: 10px;
-      font-size: 12px;
-      color: var(--lp-muted);
-      line-height: 1.6;
+      margin-top: auto; padding: 9px 12px;
+      background: var(--lp-surface); border: 1px solid var(--lp-border);
+      border-radius: 10px; font-size: 12px; color: var(--lp-muted); line-height: 1.6;
     }
 
     .demo-note code {
-      font-family: monospace;
-      font-size: 12px;
-      color: var(--lp-text);
-      background: var(--lp-border);
-      padding: 1px 5px;
-      border-radius: 4px;
+      font-family: monospace; font-size: 12px; color: var(--lp-text);
+      background: var(--lp-border); padding: 1px 5px; border-radius: 4px;
     }
 
-    /* ── Chat columns ── */
-    .chat-col {
+    /* ── Right panels ── */
+    .right-panels {
       flex: 1;
       display: flex;
-      flex-direction: column;
-      padding: 20px 14px;
-      min-width: 0;
       overflow: hidden;
     }
 
-    .chat-col.customer-col { padding-left: 18px; }
-    .chat-col.agent-col    { padding-right: 18px; }
-
-    .chat-heading {
+    .chat-panel {
+      flex: 1;
       display: flex;
-      align-items: baseline;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
+      flex-direction: column;
+      overflow: hidden;
+      padding: 18px 16px 16px;
+    }
+
+    .chat-panel + .chat-panel {
+      border-left: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    /* ── Panel header ── */
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       margin-bottom: 12px;
       flex-shrink: 0;
     }
 
-    .chat-heading .heading-sub {
-      letter-spacing: 0.04em;
-      text-transform: none;
-      font-weight: 400;
-      font-size: 11px;
+    .panel-label {
+      font-size: 12px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
     }
 
-    /* ── Chat container ── */
-    .chat-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg);
+    .poll-status {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .btn-fetch {
+      background: none;
       border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      min-height: 0;
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--muted);
+      line-height: 1.4;
+      transition: color .15s, border-color .15s;
+    }
+    .btn-fetch:hover { color: var(--text); border-color: var(--text); }
+
+    /* ── Chat container (guest) ── */
+    .chat-container {
+      flex: 1; display: flex; flex-direction: column;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden; min-height: 0;
     }
 
     .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      min-height: 0;
+      flex: 1; overflow-y: auto;
+      padding: 16px 14px;
+      display: flex; flex-direction: column; gap: 0; min-height: 0;
     }
 
     .chat-messages::-webkit-scrollbar { width: 4px; }
-    .chat-messages::-webkit-scrollbar-track { background: transparent; }
     .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-    /* ── Message groups ── */
-    .msg-group {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 16px;
-    }
-
+    .msg-group { display: flex; flex-direction: column; margin-bottom: 14px; }
     .msg-group .bubble + .bubble { margin-top: 4px; }
 
-    /* ── Bubbles ── */
     .bubble {
-      max-width: 75%;
-      padding: 12px 16px;
-      font-size: 14px;
-      line-height: 1.55;
-      animation: fadeIn 200ms ease;
-      word-break: break-word;
+      max-width: 78%; padding: 10px 14px; font-size: 14px;
+      line-height: 1.55; animation: fadeIn 200ms ease; word-break: break-word;
     }
 
     @keyframes fadeIn {
@@ -297,74 +200,44 @@
     }
 
     .bubble.user {
-      align-self: flex-end;
-      background: var(--user-bg);
-      color: var(--user-text);
-      border-radius: 18px 18px 4px 18px;
+      align-self: flex-end; background: var(--user-bg);
+      color: var(--user-text); border-radius: 18px 18px 4px 18px;
     }
 
     .bubble.bot {
-      align-self: flex-start;
-      background: var(--bot-bg);
-      color: var(--text);
-      border-radius: 18px 18px 18px 4px;
+      align-self: flex-start; background: var(--bot-bg);
+      color: var(--text); border-radius: 18px 18px 18px 4px;
     }
 
     .cs-wrapper {
-      align-self: flex-start;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      max-width: 75%;
-      animation: fadeIn 200ms ease;
+      align-self: flex-start; display: flex;
+      flex-direction: column; gap: 4px; max-width: 78%; animation: fadeIn 200ms ease;
     }
 
     .cs-label {
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      padding-left: 2px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--muted); padding-left: 2px;
     }
 
     .bubble.cs {
-      align-self: flex-start;
-      background: var(--cs-bg);
-      color: var(--text);
-      border-radius: 18px 18px 18px 4px;
-      border-left: 2px solid var(--text);
-      max-width: 100%;
+      align-self: flex-start; background: var(--cs-bg); color: var(--text);
+      border-radius: 18px 18px 18px 4px; border-left: 2px solid var(--text); max-width: 100%;
     }
 
-    .timestamp {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 4px;
-      padding: 0 2px;
-    }
+    .timestamp { font-size: 12px; color: var(--muted); margin-top: 3px; padding: 0 2px; }
     .timestamp.right { text-align: right; align-self: flex-end; }
     .timestamp.left  { text-align: left;  align-self: flex-start; }
 
     /* ── Typing indicator ── */
     .typing-indicator {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      padding: 13px 16px;
-      background: var(--bot-bg);
-      border-radius: 18px 18px 18px 4px;
-      align-self: flex-start;
-      animation: fadeIn 200ms ease;
+      display: flex; align-items: center; gap: 5px;
+      padding: 12px 14px; background: var(--bot-bg);
+      border-radius: 18px 18px 18px 4px; align-self: flex-start; animation: fadeIn 200ms ease;
     }
 
     .typing-indicator span {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      background: var(--muted);
-      border-radius: 50%;
-      animation: bounce 1.2s infinite;
+      display: inline-block; width: 6px; height: 6px;
+      background: var(--muted); border-radius: 50%; animation: bounce 1.2s infinite;
     }
     .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
     .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
@@ -376,20 +249,13 @@
 
     /* ── Waiting indicator ── */
     .waiting-indicator {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-      align-self: flex-start;
-      animation: fadeIn 200ms ease;
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 6px; align-self: flex-start; animation: fadeIn 200ms ease;
     }
 
     .waiting-dot {
-      width: 7px;
-      height: 7px;
-      background: var(--text);
-      border-radius: 50%;
-      animation: pulse 1.5s infinite;
+      width: 7px; height: 7px; background: var(--text);
+      border-radius: 50%; animation: pulse 1.5s infinite;
     }
 
     @keyframes pulse {
@@ -397,312 +263,183 @@
       50%       { opacity: 0.25; transform: scale(0.75); }
     }
 
-    .waiting-text {
-      font-size: 12px;
-      color: var(--muted);
-    }
+    .waiting-text { font-size: 12px; color: var(--muted); }
 
     /* ── Error ── */
     .error-msg {
-      align-self: flex-start;
-      font-size: 12px;
-      color: var(--muted);
-      padding: 8px 12px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      animation: fadeIn 200ms ease;
+      align-self: flex-start; font-size: 12px; color: var(--muted);
+      padding: 8px 12px; border: 1px solid var(--border);
+      border-radius: 10px; animation: fadeIn 200ms ease;
     }
 
     /* ── Session end ── */
     .session-end {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      padding: 18px 0 4px;
-      animation: fadeIn 200ms ease;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 12px; padding: 16px 0 4px; animation: fadeIn 200ms ease;
     }
 
-    .session-divider {
-      width: 100%;
-      height: 1px;
-      background: var(--border);
-    }
+    .session-divider { width: 100%; height: 1px; background: var(--border); }
 
     .session-notice {
-      font-size: 12px;
-      color: var(--muted);
-      text-align: center;
-      max-width: 340px;
+      font-size: 12px; color: var(--muted);
+      text-align: center; max-width: 300px;
     }
 
     .btn-new-session {
-      font-family: var(--font);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text);
-      background: var(--bg);
-      border: 1px solid var(--text);
-      border-radius: 10px;
-      padding: 9px 20px;
-      cursor: pointer;
-      transition: background 120ms, color 120ms;
+      font-family: var(--font); font-size: 13px; font-weight: 500;
+      color: var(--text); background: var(--bg);
+      border: 1px solid var(--text); border-radius: 10px;
+      padding: 8px 18px; cursor: pointer; transition: background 120ms, color 120ms;
     }
 
-    .btn-new-session:hover {
-      background: var(--text);
-      color: var(--bg);
-    }
+    .btn-new-session:hover { background: var(--text); color: var(--bg); }
 
     /* ── Input bar ── */
     .input-bar {
-      display: flex;
-      gap: 8px;
-      padding: 12px 14px;
-      border-top: 1px solid var(--border);
-      background: var(--bg);
-      flex-shrink: 0;
+      display: flex; gap: 8px; padding: 10px 12px;
+      border-top: 1px solid var(--border); background: var(--bg); flex-shrink: 0;
     }
 
     .input-bar textarea {
-      flex: 1;
-      font-family: var(--font);
-      font-size: 14px;
-      color: var(--text);
-      background: var(--surface);
-      border: 1px solid transparent;
-      border-radius: 12px;
-      padding: 10px 14px;
-      resize: none;
-      outline: none;
-      line-height: 1.5;
-      min-height: 40px;
-      max-height: 80px;
-      overflow-y: auto;
-      transition: border-color 120ms, background 120ms;
+      flex: 1; font-family: var(--font); font-size: 14px;
+      color: var(--text); background: var(--surface);
+      border: 1px solid transparent; border-radius: 12px;
+      padding: 9px 12px; resize: none; outline: none;
+      line-height: 1.5; min-height: 38px; max-height: 76px;
+      overflow-y: auto; transition: border-color 120ms, background 120ms;
     }
 
-    .input-bar textarea:focus {
-      background: var(--bg);
-      border-color: var(--text);
-    }
-
+    .input-bar textarea:focus { background: var(--bg); border-color: var(--text); }
     .input-bar textarea::placeholder { color: var(--muted); }
     .input-bar textarea:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .btn-send {
-      font-family: var(--font);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--bg);
-      background: var(--text);
-      border: 1px solid var(--text);
-      border-radius: 10px;
-      padding: 0 16px;
-      cursor: pointer;
-      white-space: nowrap;
-      align-self: flex-end;
-      height: 40px;
+      font-family: var(--font); font-size: 13px; font-weight: 500;
+      color: var(--bg); background: var(--text); border: 1px solid var(--text);
+      border-radius: 10px; padding: 0 14px; cursor: pointer;
+      white-space: nowrap; align-self: flex-end; height: 38px;
       transition: background 120ms, color 120ms;
     }
 
-    .btn-send:hover:not(:disabled) {
-      background: var(--bg);
-      color: var(--text);
-    }
-
+    .btn-send:hover:not(:disabled) { background: var(--bg); color: var(--text); }
     .btn-send:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* ── Agent panel ── */
-    .agent-empty {
-      margin: auto;
-      max-width: 280px;
-      text-align: center;
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.6;
+    /* ── CS Agent panel — ticket list ── */
+    .ticket-list {
+      flex: 1; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 10px;
+      min-height: 0;
     }
 
-    .agent-msg {
-      align-self: stretch;
-      background: var(--bot-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin-bottom: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-      animation: fadeIn 200ms ease;
+    .ticket-list::-webkit-scrollbar { width: 4px; }
+    .ticket-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .empty-state {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; color: var(--muted); text-align: center;
     }
 
-    .agent-msg-header {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1.4;
+    .ticket-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 14px; padding: 14px; display: flex;
+      flex-direction: column; gap: 10px; animation: fadeIn 200ms ease;
     }
 
-    .agent-fields {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
+    .ticket-meta {
+      display: flex; justify-content: space-between; align-items: center;
     }
 
-    .agent-field {
-      display: flex;
-      gap: 8px;
-      font-size: 13px;
-      line-height: 1.5;
+    .ticket-session {
+      font-size: 12px; color: var(--muted); font-family: monospace;
     }
 
-    .agent-field-key {
-      flex-shrink: 0;
-      width: 70px;
-      color: var(--muted);
+    .ticket-time { font-size: 12px; color: var(--muted); }
+
+    .ticket-question {
+      font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.4;
     }
 
-    .agent-field-val {
-      flex: 1;
-      color: var(--text);
-      word-break: break-word;
+    .ticket-draft-section {
+      background: var(--surface); border-radius: 10px; padding: 10px 12px;
+      display: flex; flex-direction: column; gap: 5px;
     }
 
-    .agent-draft {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 12px;
+    .ticket-draft-label {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--muted);
     }
 
-    .agent-draft-label {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 5px;
+    .ticket-draft-text { font-size: 13px; color: var(--text); line-height: 1.45; }
+
+    .ticket-actions { display: flex; gap: 8px; }
+
+    .btn-approve {
+      font-family: var(--font); font-size: 12px; font-weight: 500;
+      color: var(--bg); background: var(--text); border: 1px solid var(--text);
+      border-radius: 8px; padding: 6px 14px; cursor: pointer;
+      transition: background 120ms, color 120ms; flex: 1;
     }
 
-    .agent-draft-body {
-      font-size: 13px;
-      line-height: 1.55;
-      color: var(--text);
+    .btn-approve:hover { background: #333; }
+    .btn-approve:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-reject {
+      font-family: var(--font); font-size: 12px; font-weight: 500;
+      color: var(--text); background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 6px 14px; cursor: pointer;
+      transition: border-color 120ms; flex: 1;
     }
 
-    .agent-commands {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    .btn-reject:hover { border-color: var(--text); }
+    .btn-reject:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .ticket-reply-section { display: flex; flex-direction: column; gap: 8px; }
+
+    .ticket-reply-input {
+      font-family: var(--font); font-size: 13px; color: var(--text);
+      background: var(--surface); border: 1px solid transparent;
+      border-radius: 10px; padding: 9px 12px; resize: none; outline: none;
+      line-height: 1.5; min-height: 72px; max-height: 120px;
+      width: 100%; transition: border-color 120ms, background 120ms;
     }
 
-    .agent-commands.done .agent-cmd {
-      opacity: 0.35;
-      pointer-events: none;
-    }
+    .ticket-reply-input:focus { background: var(--bg); border-color: var(--text); }
+    .ticket-reply-input::placeholder { color: var(--muted); }
 
-    .agent-cmd-row {
-      font-size: 13px;
-      color: var(--muted);
+    .ticket-kb-row {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--muted); cursor: pointer; user-select: none;
     }
+    .ticket-kb-check { cursor: pointer; accent-color: var(--text); }
 
-    .agent-cmd {
-      font-family: monospace;
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--text);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 3px 7px;
-      text-decoration: none;
-      cursor: pointer;
+    .btn-send-reply {
+      font-family: var(--font); font-size: 12px; font-weight: 500;
+      color: var(--bg); background: var(--text); border: 1px solid var(--text);
+      border-radius: 8px; padding: 7px 14px; cursor: pointer; align-self: flex-end;
       transition: background 120ms, color 120ms;
     }
 
-    .agent-cmd:hover {
-      background: var(--text);
-      color: var(--bg);
+    .btn-send-reply:hover { background: #333; }
+    .btn-send-reply:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .ticket-sent {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--muted); padding: 4px 0;
     }
 
-    .agent-cmd-desc { margin-left: 7px; }
-
-    .agent-note {
-      font-size: 13px;
-      line-height: 1.55;
-      color: var(--text);
-      background: var(--bg);
-      border-left: 2px solid var(--text);
-      border-radius: 4px;
-      padding: 8px 12px;
+    .ticket-sent-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #555;
     }
-
-    .agent-ack {
-      align-self: stretch;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 11px 14px;
-      margin-bottom: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      animation: fadeIn 200ms ease;
-    }
-
-    .agent-ack-body {
-      font-size: 13px;
-      line-height: 1.55;
-      color: var(--text);
-      white-space: pre-line;
-    }
-
-    .agent-footer {
-      font-size: 11px;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
-      padding-top: 8px;
-    }
-
-    .n8n-link {
-      color: var(--muted);
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-    .n8n-link:hover { color: var(--text); }
 
     /* ── Mobile ── */
     @media (max-width: 900px) {
       html, body { overflow: auto; }
-
-      .shell {
-        flex-direction: column;
-        height: auto;
-        min-height: 100vh;
-        overflow: visible;
-        max-width: 560px;
-      }
-
-      .left-panel {
-        width: 100%;
-        height: auto;
-        overflow: visible;
-        padding: 24px 20px;
-        gap: 24px;
-      }
-
+      .shell { flex-direction: column; height: auto; min-height: 100vh; overflow: visible; }
+      .left-panel { width: 100%; height: auto; overflow: visible; padding: 20px 16px; gap: 20px; }
       .demo-note { margin-top: 0; }
-
-      .chat-col {
-        flex: none;
-        height: 86svh;
-        padding: 16px;
-      }
-
-      .chat-col.customer-col,
-      .chat-col.agent-col { padding: 16px; }
-
-      .chat-messages { min-height: 0; }
+      .right-panels { flex-direction: column; overflow: visible; }
+      .chat-panel { height: 80vh; padding: 16px; }
+      .chat-panel + .chat-panel { border-left: none; border-top: 1px solid var(--border); }
     }
   </style>
 </head>
@@ -712,7 +449,6 @@
 
   <!-- ── Left panel ── -->
   <aside class="left-panel">
-
     <div>
       <div class="wordmark">BOLDR</div>
       <div class="tagline">AI-powered support, always on.</div>
@@ -720,35 +456,17 @@
 
     <div class="info-section">
       <div class="section-label">Competition</div>
-      <div class="info-row">
-        <span class="info-key">Event</span>
-        <span class="info-val">Echelon 2026</span>
-      </div>
-      <div class="info-row">
-        <span class="info-key">Track</span>
-        <span class="info-val">AI Workflow Challenge</span>
-      </div>
-      <div class="info-row">
-        <span class="info-key">Challenge</span>
-        <span class="info-val">BOLDR Customer Intelligence Engine</span>
-      </div>
-      <div class="info-row">
-        <span class="info-key">Team</span>
-        <span class="info-val">Alpha Beta</span>
-      </div>
+      <div class="info-row"><span class="info-key">Event</span><span class="info-val">Echelon 2026</span></div>
+      <div class="info-row"><span class="info-key">Track</span><span class="info-val">AI Workflow Challenge</span></div>
+      <div class="info-row"><span class="info-key">Challenge</span><span class="info-val">BOLDR Customer Intelligence</span></div>
+      <div class="info-row"><span class="info-key">Team</span><span class="info-val">Alpha Beta</span></div>
     </div>
 
     <div class="info-section">
       <div class="section-label">Team</div>
       <div class="team-list">
-        <div class="team-member">
-          <div class="avatar">TC</div>
-          <span class="member-name">Tejas Chavan</span>
-        </div>
-        <div class="team-member">
-          <div class="avatar">AP</div>
-          <span class="member-name">Ayush K Pacheriwala</span>
-        </div>
+        <div class="team-member"><div class="avatar">TC</div><span class="member-name">Tejas Chavan</span></div>
+        <div class="team-member"><div class="avatar">AP</div><span class="member-name">Ayush K Pacheriwala</span></div>
       </div>
     </div>
 
@@ -757,121 +475,108 @@
       <div class="link-list">
         <a class="doc-link" href="https://docs.google.com/presentation/d/19LqPk6OT26JMy7oP0MOI49OOiD9o52yY/edit?usp=sharing&ouid=100651373721043828247&rtpof=true&sd=true" target="_blank">
           <span class="doc-link-icon">📄</span>
-          <div class="doc-link-body">
-            <span class="doc-link-title">Proposal Slides</span>
-            <span class="doc-link-sub">Google Slides · Submission deck</span>
-          </div>
+          <div class="doc-link-body"><span class="doc-link-title">Proposal Slides</span><span class="doc-link-sub">Google Slides</span></div>
         </a>
         <a class="doc-link" href="https://drive.google.com/file/d/1aA465z3f5m5p2iapvTlYtNXDwvjMpm9C/view?usp=sharing" target="_blank">
           <span class="doc-link-icon">🎬</span>
-          <div class="doc-link-body">
-            <span class="doc-link-title">Demo Video</span>
-            <span class="doc-link-sub">Google Drive · Full walkthrough</span>
-          </div>
+          <div class="doc-link-body"><span class="doc-link-title">Demo Video</span><span class="doc-link-sub">Google Drive</span></div>
         </a>
         <a class="doc-link" href="https://github.com/tejasdotchavan/e27-boldr-challenge-AlphaBeta" target="_blank">
           <span class="doc-link-icon">💻</span>
-          <div class="doc-link-body">
-            <span class="doc-link-title">GitHub Repo</span>
-            <span class="doc-link-sub">Source · Architecture · Workflows</span>
-          </div>
+          <div class="doc-link-body"><span class="doc-link-title">GitHub Repo</span><span class="doc-link-sub">Source · Workflows</span></div>
         </a>
       </div>
     </div>
 
-    <div class="demo-note">
-      Add <code>?demo=true</code> to the URL to run a scripted demo without a live n8n connection.
-    </div>
 
   </aside>
 
-  <!-- ── Customer chat ── -->
-  <section class="chat-col customer-col">
-    <div class="chat-heading">
-      Customer Chat
-      <span class="heading-sub">What the customer sees</span>
-    </div>
-    <div class="chat-container">
-      <div class="chat-messages" id="chatMessages"></div>
-      <div class="input-bar">
-        <textarea
-          id="msgInput"
-          rows="1"
-          placeholder="Ask me about BOLDR's features…"
-        ></textarea>
-        <button class="btn-send" id="sendBtn">Send</button>
+  <!-- ── Right panels ── -->
+  <div class="right-panels">
+
+    <!-- Guest chat -->
+    <div class="chat-panel">
+      <div class="panel-header">
+        <span class="panel-label">Guest</span>
+      </div>
+      <div class="chat-container">
+        <div class="chat-messages" id="guestMessages"></div>
+        <div class="input-bar">
+          <textarea id="msgInput" rows="1" placeholder="Ask me about BOLDR's features…"></textarea>
+          <button class="btn-send" id="sendBtn">Send</button>
+        </div>
       </div>
     </div>
-  </section>
 
-  <!-- ── Agent chat ── -->
-  <section class="chat-col agent-col">
-    <div class="chat-heading">
-      Agent View
-      <span class="heading-sub">Telegram · routed by n8n</span>
+    <!-- CS Agent panel -->
+    <div class="chat-panel">
+      <div class="panel-header">
+        <span class="panel-label">CS Agent</span>
+        <span class="poll-status" id="pollStatus"></span>
+        <button class="btn-fetch" id="fetchNowBtn">↻ Refresh now</button>
+      </div>
+      <div class="ticket-list" id="ticketList">
+        <div class="empty-state">No pending queries — refresh to check.</div>
+      </div>
     </div>
-    <div class="chat-container">
-      <div class="chat-messages" id="agentMessages"></div>
-    </div>
-  </section>
 
+  </div>
 </div>
 
 <script>
-  // ── Config — swap these out before deploying ────────────────────────────────
-  const N8N_WEBHOOK_URL = 'https://boldre27alphabeta.app.n8n.cloud/webhook/boldr-chat';
-  const N8N_POLL_URL    = 'https://boldre27alphabeta.app.n8n.cloud/webhook/boldr-poll';
-  const N8N_APPROVE_URL = 'https://boldre27alphabeta.app.n8n.cloud/webhook/boldr-approve';
-  const N8N_REJECT_URL  = 'https://boldre27alphabeta.app.n8n.cloud/webhook/boldr-reject';
-  // ───────────────────────────────────────────────────────────────────────────
+  // ── Config ────────────────────────────────────────────────────────────────────
+  const N8N_WEBHOOK_URL = 'https://teamalphabeta.app.n8n.cloud/webhook/boldr-chat';
+  const CS_RESPOND_URL  = 'https://teamalphabeta.app.n8n.cloud/webhook/cs-respond';
+  const SHEETS_CSV_URL  = 'https://docs.google.com/spreadsheets/d/1rYiR90pd62PgbcA4kPNfFXzKNfqzrRL60JSEm3gYbNk/gviz/tq?tqx=out:csv&sheet=cs_queue';
+  const POLL_INTERVAL_MS = 10000;
+  // ─────────────────────────────────────────────────────────────────────────────
 
-  const POLL_INTERVAL_MS  = 5000;
-  const POLL_MAX_ATTEMPTS = 60;
-  const SEND_TIMEOUT_MS   = 15000;
-
-  const chatMessages  = document.getElementById('chatMessages');
-  const agentMessages = document.getElementById('agentMessages');
-  const msgInput      = document.getElementById('msgInput');
-  const sendBtn       = document.getElementById('sendBtn');
-
-  let sessionId     = null;
-  let pollTimer     = null;
-  let pollAttempts  = 0;
-  let waitingEl     = null;
-  let sessionEnded  = false;
-  let awaitingReply = false;
-
+  const SEND_TIMEOUT_MS = 15000;
   const DEMO_MODE = new URLSearchParams(location.search).get('demo') === 'true';
 
-  const DEMO_SCRIPT = {
-    draft: {
-      ticketId: '47OFJN',
-      customer: 'Tejas',
-      draftReply: "Hi Tejas, thanks for reaching out! Happy to help with that. We are currently exploring partnerships with sustainable logistics providers and will update customers as soon as carbon-neutral or offset shipping becomes available. If this is important to you, we recommend checking back with us or reaching out to support@boldr.co to be notified when this option launches."
+  const guestMessages = document.getElementById('guestMessages');
+  const msgInput      = document.getElementById('msgInput');
+  const sendBtn       = document.getElementById('sendBtn');
+  const ticketList    = document.getElementById('ticketList');
+  const pollStatus    = document.getElementById('pollStatus');
+  const fetchNowBtn   = document.getElementById('fetchNowBtn');
+  const activeCards      = new Set(); // session_ids currently being actioned — skip re-render
+  const resolvedSessions = new Set(); // session_ids fully sent — never re-show even if CSV is cached
+
+  let sessionEnded  = false;
+  let awaitingReply = false;
+  let waitingEl     = null;
+
+  // In-page delivery registry: session_id → fn(answer)
+  const sessionRegistry = {};
+
+  function registerSession(sessionId, deliverFn) {
+    sessionRegistry[sessionId] = deliverFn;
+  }
+
+  function deliverToGuest(sessionId, answer) {
+    const fn = sessionRegistry[sessionId];
+    if (fn) { fn(answer); delete sessionRegistry[sessionId]; }
+  }
+
+  // ── Demo data ─────────────────────────────────────────────────────────────────
+  const DEMO = {
+    msg1: {
+      pending: { type: 'pending', reply: "Thanks for reaching out — our team is reviewing your message and will respond shortly.", session_id: 'demo-001' },
+      draft: "Hi Guest, thanks for reaching out! Currently, BOLDR does not offer carbon-neutral or offset shipping, but we're actively exploring sustainable logistics partnerships. We'll notify customers as soon as this becomes available. You can also reach out to support@boldr.co to be added to the notification list.",
+      csAnswer: "Hi Guest, thanks for reaching out! Currently, BOLDR does not offer carbon-neutral or offset shipping, but we're actively exploring sustainable logistics partnerships. We'll notify customers as soon as this becomes available. You can also reach out to support@boldr.co to be added to the notification list."
     },
-    escalation: {
-      reply: "Great question — that's outside what I can answer right now. A customer success agent will follow up shortly with a detailed response.",
-      customer: 'Tejas'
-    },
-    resolved: {
-      reply: "Hi there! This is Alex from the BOLDR customer success team. To answer your question: BOLDR's enterprise plan includes SSO, custom data retention policies, a dedicated onboarding manager, and SLA-backed uptime guarantees. Happy to set up a call if you'd like a full walkthrough!"
+    msg2: {
+      pending: { type: 'pending', reply: "Great question — a customer success agent will follow up shortly.", session_id: 'demo-002' },
+      csAnswer: "Hi! I'm Alex from BOLDR's CS team. Our enterprise plan includes SSO, custom data retention policies, a dedicated onboarding manager, and SLA-backed uptime guarantees. Happy to set up a call for a full walkthrough!"
     }
   };
 
   let demoMsgCount = 0;
 
-  const sleep = ms => new Promise(r => setTimeout(r, ms));
-  function generateSessionId() { return `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`; }
+  // ── Helpers ───────────────────────────────────────────────────────────────────
   function formatTime(d) { return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
-  function scrollToBottom() { chatMessages.scrollTop = chatMessages.scrollHeight; }
-  function agentScrollToBottom() { agentMessages.scrollTop = agentMessages.scrollHeight; }
-
-  function el(tag, cls, text) {
-    const n = document.createElement(tag);
-    if (cls) n.className = cls;
-    if (text != null) n.textContent = text;
-    return n;
-  }
+  function scrollGuest() { guestMessages.scrollTop = guestMessages.scrollHeight; }
 
   function setInputState(disabled) {
     awaitingReply = disabled;
@@ -879,380 +584,409 @@
     sendBtn.disabled  = disabled || sessionEnded;
   }
 
-  // ── Customer chat ──────────────────────────────────────────────────────────
-  function appendUserMessage(text) {
+  // ── Guest chat render ─────────────────────────────────────────────────────────
+  function appendUserMsg(text) {
     const g = document.createElement('div');
-    g.className = 'msg-group';
-    g.style.alignItems = 'flex-end';
-    const b = el('div', 'bubble user', text);
-    const ts = el('div', 'timestamp right', formatTime(new Date()));
-    g.appendChild(b); g.appendChild(ts);
-    chatMessages.appendChild(g);
-    scrollToBottom();
+    g.className = 'msg-group'; g.style.alignItems = 'flex-end';
+    const b = document.createElement('div'); b.className = 'bubble user'; b.textContent = text;
+    const ts = document.createElement('div'); ts.className = 'timestamp right'; ts.textContent = formatTime(new Date());
+    g.appendChild(b); g.appendChild(ts); guestMessages.appendChild(g); scrollGuest();
   }
 
-  function showTypingIndicator() {
-    const elx = document.createElement('div');
-    elx.className = 'typing-indicator';
-    elx.id = 'typingIndicator';
-    elx.innerHTML = '<span></span><span></span><span></span>';
-    chatMessages.appendChild(elx);
-    scrollToBottom();
+  function showTyping() {
+    const el = document.createElement('div');
+    el.className = 'typing-indicator'; el.id = 'typingEl';
+    el.innerHTML = '<span></span><span></span><span></span>';
+    guestMessages.appendChild(el); scrollGuest();
   }
 
-  function removeTypingIndicator() {
-    const elx = document.getElementById('typingIndicator');
-    if (elx) elx.remove();
-  }
+  function removeTyping() { const el = document.getElementById('typingEl'); if (el) el.remove(); }
 
-  function appendBotMessage(text) {
+  function appendBotMsg(text) {
     const g = document.createElement('div');
-    g.className = 'msg-group';
-    g.style.alignItems = 'flex-start';
-    const b = el('div', 'bubble bot', text);
-    const ts = el('div', 'timestamp left', formatTime(new Date()));
-    g.appendChild(b); g.appendChild(ts);
-    chatMessages.appendChild(g);
-    scrollToBottom();
+    g.className = 'msg-group'; g.style.alignItems = 'flex-start';
+    const b = document.createElement('div'); b.className = 'bubble bot'; b.textContent = text;
+    const ts = document.createElement('div'); ts.className = 'timestamp left'; ts.textContent = formatTime(new Date());
+    g.appendChild(b); g.appendChild(ts); guestMessages.appendChild(g); scrollGuest();
   }
 
-  function appendCSMessage(text) {
-    const w = document.createElement('div');
-    w.className = 'cs-wrapper';
-    const lbl = el('div', 'cs-label', 'CS Agent');
-    const b = el('div', 'bubble cs', text);
-    const ts = el('div', 'timestamp left', formatTime(new Date()));
+  function appendCSMsg(text) {
+    const w = document.createElement('div'); w.className = 'cs-wrapper';
+    const lbl = document.createElement('div'); lbl.className = 'cs-label'; lbl.textContent = 'CS Agent';
+    const b = document.createElement('div'); b.className = 'bubble cs'; b.textContent = text;
+    const ts = document.createElement('div'); ts.className = 'timestamp left'; ts.textContent = formatTime(new Date());
     w.appendChild(lbl); w.appendChild(b); w.appendChild(ts);
-    chatMessages.appendChild(w);
-    scrollToBottom();
+    guestMessages.appendChild(w); scrollGuest();
   }
 
-  function showWaitingIndicator(text) {
-    removeWaitingIndicator();
-    const wrap = document.createElement('div');
-    wrap.className = 'waiting-indicator';
-    wrap.appendChild(el('div', 'waiting-dot'));
-    wrap.appendChild(el('div', 'waiting-text', text || 'Waiting for your CS agent…'));
-    chatMessages.appendChild(wrap);
-    scrollToBottom();
-    waitingEl = wrap;
+  function showWaiting() {
+    const el = document.createElement('div'); el.className = 'waiting-indicator'; el.id = 'waitingEl';
+    el.innerHTML = '<div class="waiting-dot"></div><div class="waiting-text">Waiting for CS agent response…</div>';
+    guestMessages.appendChild(el); scrollGuest(); waitingEl = el;
   }
 
-  function removeWaitingIndicator() {
-    if (waitingEl) { waitingEl.remove(); waitingEl = null; }
-  }
+  function removeWaiting() { if (waitingEl) { waitingEl.remove(); waitingEl = null; } }
 
   function showError(msg) {
-    chatMessages.appendChild(el('div', 'error-msg', msg));
-    scrollToBottom();
+    const el = document.createElement('div'); el.className = 'error-msg'; el.textContent = msg;
+    guestMessages.appendChild(el); scrollGuest();
   }
 
   function showSessionEnd() {
     sessionEnded = true;
     msgInput.placeholder = 'Session ended — refresh to continue.';
-    msgInput.disabled = true;
-    sendBtn.disabled  = true;
-    const end = document.createElement('div');
-    end.className = 'session-end';
-    const note = el('div', 'session-notice',
-      "This session is complete. This demo covers a limited scope of BOLDR's functionality.");
-    const btn = el('button', 'btn-new-session', 'Start New Session');
-    btn.onclick = () => window.location.reload();
-    end.appendChild(el('div', 'session-divider'));
-    end.appendChild(note);
-    end.appendChild(btn);
-    chatMessages.appendChild(end);
-    scrollToBottom();
+    msgInput.disabled = true; sendBtn.disabled = true;
+    const end = document.createElement('div'); end.className = 'session-end';
+    const div = document.createElement('div'); div.className = 'session-divider';
+    const note = document.createElement('div'); note.className = 'session-notice';
+    note.textContent = "This session is complete. This demo covers a limited scope of BOLDR's functionality.";
+    const btn = document.createElement('button'); btn.className = 'btn-new-session';
+    btn.textContent = 'Start New Session'; btn.onclick = () => window.location.reload();
+    end.appendChild(div); end.appendChild(note); end.appendChild(btn);
+    guestMessages.appendChild(end); scrollGuest();
   }
 
-  // ── Agent chat ─────────────────────────────────────────────────────────────
-  function showAgentEmpty() {
-    const e = el('div', 'agent-empty',
-      'Agent inbox. Drafts awaiting approval and unresolved tickets routed from n8n appear here once a customer sends a message.');
-    e.id = 'agentEmpty';
-    agentMessages.appendChild(e);
-  }
-
-  function agentClearEmpty() {
-    const e = document.getElementById('agentEmpty');
-    if (e) e.remove();
-  }
-
-  function agentField(key, val) {
-    const f = el('div', 'agent-field');
-    f.appendChild(el('span', 'agent-field-key', key));
-    f.appendChild(el('span', 'agent-field-val', val));
-    return f;
-  }
-
-  function agentFooter() {
-    const f = el('div', 'agent-footer');
-    f.appendChild(document.createTextNode('Sent automatically with '));
-    const a = el('a', 'n8n-link', 'n8n');
-    a.href = 'https://n8n.io';
-    a.target = '_blank';
-    a.rel = 'noopener';
-    f.appendChild(a);
-    f.appendChild(document.createTextNode(' · ' + formatTime(new Date())));
-    return f;
-  }
-
-  function commandLink(action, ticketId, desc) {
-    const row = el('div', 'agent-cmd-row');
-    const link = el('a', 'agent-cmd ' + action, '/' + action + ticketId);
-    link.href = '#';
-    row.appendChild(link);
-    row.appendChild(el('span', 'agent-cmd-desc', desc));
-    return { row, link };
-  }
-
-  function appendAgentDraft(d) {
-    agentClearEmpty();
-    const msg = el('div', 'agent-msg');
-    msg.appendChild(el('div', 'agent-msg-header', '✅ Draft ready for approval'));
-
-    const fields = el('div', 'agent-fields');
-    fields.appendChild(agentField('ID', d.ticketId));
-    fields.appendChild(agentField('Customer', d.customer));
-    fields.appendChild(agentField('Question', d.question));
-    msg.appendChild(fields);
-
-    const draft = el('div', 'agent-draft');
-    draft.appendChild(el('div', 'agent-draft-label', 'Draft reply'));
-    draft.appendChild(el('div', 'agent-draft-body', d.draftReply));
-    msg.appendChild(draft);
-
-    const cmds = el('div', 'agent-commands');
-    const approve = commandLink('approve', d.ticketId, '— send to customer');
-    const reject  = commandLink('reject',  d.ticketId, '— log to CS queue');
-    cmds.appendChild(approve.row);
-    cmds.appendChild(reject.row);
-    msg.appendChild(cmds);
-
-    msg.appendChild(agentFooter());
-    agentMessages.appendChild(msg);
-    agentScrollToBottom();
-
-    approve.link.addEventListener('click', e => { e.preventDefault(); handleApprove(d, cmds); });
-    reject.link.addEventListener('click',  e => { e.preventDefault(); handleReject(d, cmds); });
-  }
-
-  function appendAgentTicket(d) {
-    agentClearEmpty();
-    const msg = el('div', 'agent-msg');
-    msg.appendChild(el('div', 'agent-msg-header', '🚨 Unresolved ticket'));
-
-    const fields = el('div', 'agent-fields');
-    fields.appendChild(agentField('ID', d.ticketId));
-    fields.appendChild(agentField('Customer', d.customer));
-    fields.appendChild(agentField('Question', d.question));
-    msg.appendChild(fields);
-
-    msg.appendChild(el('div', 'agent-note',
-      'Fill in cs_answer in the Google Sheet and set status to answered.'));
-    msg.appendChild(agentFooter());
-    agentMessages.appendChild(msg);
-    agentScrollToBottom();
-  }
-
-  function appendAgentAck(text) {
-    agentClearEmpty();
-    const msg = el('div', 'agent-ack');
-    msg.appendChild(el('div', 'agent-ack-body', text));
-    msg.appendChild(agentFooter());
-    agentMessages.appendChild(msg);
-    agentScrollToBottom();
-  }
-
-  // ── Approve / reject ───────────────────────────────────────────────────────
-  function deliverApprovedReply(reply) {
-    removeWaitingIndicator();
-    appendBotMessage(reply);
-    setInputState(false);
-  }
-
-  async function handleApprove(d, cmds) {
-    cmds.classList.add('done');
-    if (DEMO_MODE) {
-      deliverApprovedReply(d.draftReply);
-      appendAgentAck('✅ Reply approved and delivered to the customer. Ticket ' + d.ticketId + ' closed.');
-      return;
-    }
-    try {
-      const res = await fetch(
-        `${N8N_APPROVE_URL}?id=${encodeURIComponent(d.ticketId)}&session_id=${encodeURIComponent(d.sessionId)}`);
-      if (!res.ok) throw new Error('bad status');
-      let reply = d.draftReply;
-      try { const j = await res.json(); if (j && j.reply) reply = j.reply; } catch { /* keep draft */ }
-      deliverApprovedReply(reply);
-      appendAgentAck('✅ Reply approved and delivered to the customer. Ticket ' + d.ticketId + ' closed.');
-    } catch {
-      cmds.classList.remove('done');
-      appendAgentAck("⚠️ Couldn't reach n8n — the approval didn't go through. Please try again.");
-    }
-  }
-
-  async function handleReject(d, cmds) {
-    cmds.classList.add('done');
-    if (!DEMO_MODE) {
-      try {
-        const res = await fetch(
-          `${N8N_REJECT_URL}?id=${encodeURIComponent(d.ticketId)}&session_id=${encodeURIComponent(d.sessionId)}`);
-        if (!res.ok) throw new Error('bad status');
-      } catch {
-        cmds.classList.remove('done');
-        appendAgentAck("⚠️ Couldn't reach n8n — the rejection didn't go through. Please try again.");
-        return;
-      }
-    }
-    appendAgentAck('↩️ Draft rejected. Ticket ' + d.ticketId + ' logged to the CS queue for manual handling.');
-    removeWaitingIndicator();
-    appendBotMessage("Thanks for your patience — I've passed this to our customer success team and they'll follow up shortly.");
-    appendAgentTicket({ ticketId: d.ticketId, customer: d.customer, question: d.question });
-    startPolling(d.sessionId);
-  }
-
-  // ── Polling (KB miss + post-reject CS flow) ────────────────────────────────
-  async function pollForAnswer(sid) {
-    pollAttempts++;
-    if (pollAttempts > POLL_MAX_ATTEMPTS) {
-      clearInterval(pollTimer);
-      removeWaitingIndicator();
-      showError('Our team has your question and will be in touch via email.');
-      return;
-    }
-    if (DEMO_MODE) {
-      if (pollAttempts >= 2) {
-        clearInterval(pollTimer);
-        removeWaitingIndicator();
-        appendCSMessage(DEMO_SCRIPT.resolved.reply);
-        showSessionEnd();
-      }
-      return;
-    }
-    try {
-      const res = await fetch(`${N8N_POLL_URL}?session_id=${encodeURIComponent(sid)}`);
-      if (!res.ok) return;
-      const data = await res.json();
-      if (data.status === 'resolved') {
-        clearInterval(pollTimer);
-        removeWaitingIndicator();
-        appendCSMessage(data.reply);
-        showSessionEnd();
-      }
-    } catch { /* keep polling */ }
-  }
-
-  function startPolling(sid) {
-    pollAttempts = 0;
-    showWaitingIndicator('Waiting for your CS agent…');
-    pollTimer = setInterval(() => pollForAnswer(sid), POLL_INTERVAL_MS);
-  }
-
-  // ── Send ───────────────────────────────────────────────────────────────────
+  // ── Send (guest) ──────────────────────────────────────────────────────────────
   async function sendMessage() {
     const text = msgInput.value.trim();
     if (!text || awaitingReply || sessionEnded) return;
-    msgInput.value = '';
-    msgInput.style.height = 'auto';
-    appendUserMessage(text);
-    setInputState(true);
-    showTypingIndicator();
+    msgInput.value = ''; msgInput.style.height = 'auto';
+    appendUserMsg(text); setInputState(true); showTyping();
 
     if (DEMO_MODE) {
-      await sleep(1200);
-      removeTypingIndicator();
+      await new Promise(r => setTimeout(r, 1200));
+      removeTyping();
       demoMsgCount++;
+
       if (demoMsgCount === 1) {
-        // KB hit — draft routed to the agent for approval
-        appendAgentDraft({
-          ticketId:   DEMO_SCRIPT.draft.ticketId,
-          customer:   DEMO_SCRIPT.draft.customer,
-          question:   text,
-          draftReply: DEMO_SCRIPT.draft.draftReply,
-          sessionId:  'demo-' + generateSessionId()
+        const d = DEMO.msg1;
+        appendBotMsg(d.pending.reply);
+        showWaiting();
+        registerSession(d.pending.session_id, (answer) => {
+          removeWaiting(); appendCSMsg(answer); showSessionEnd();
         });
-        showWaitingIndicator('Waiting for an agent to approve the reply…');
+        // Simulate CS approving draft after delay — adds a demo ticket to CS panel
+        setTimeout(() => {
+          addDemoTicket({
+            session_id: d.pending.session_id,
+            question: text,
+            draft_reply: d.draft,
+            status: 'pending_approval',
+            timestamp: new Date().toISOString()
+          });
+        }, 1500);
       } else {
-        // KB miss — unresolved ticket routed to the agent
-        appendBotMessage(DEMO_SCRIPT.escalation.reply);
-        appendAgentTicket({
-          ticketId: new Date().toISOString(),
-          customer: DEMO_SCRIPT.escalation.customer,
-          question: text
+        const d = DEMO.msg2;
+        appendBotMsg(d.pending.reply);
+        showWaiting();
+        registerSession(d.pending.session_id, (answer) => {
+          removeWaiting(); appendCSMsg(answer); showSessionEnd();
         });
-        startPolling('demo-session');
+        setTimeout(() => {
+          addDemoTicket({
+            session_id: d.pending.session_id,
+            question: text,
+            draft_reply: '',
+            status: 'pending',
+            timestamp: new Date().toISOString()
+          });
+        }, 1500);
       }
       return;
     }
 
-    const clientSid = generateSessionId();
+    const sessionId = `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), SEND_TIMEOUT_MS);
+
     try {
       const res = await fetch(N8N_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, session_id: clientSid }),
+        body: JSON.stringify({ message: text, session_id: sessionId }),
         signal: controller.signal
       });
-      clearTimeout(timeout);
-      removeTypingIndicator();
+      clearTimeout(timeout); removeTyping();
       if (!res.ok) { showError('Something went wrong — please try again.'); setInputState(false); return; }
-      const data = await res.json();
 
-      if (data.type === 'draft') {
-        // KB hit — draft routed to the agent; customer waits for approval
-        appendAgentDraft({
-          ticketId:   data.ticket_id,
-          customer:   data.customer || 'Customer',
-          question:   data.question || text,
-          draftReply: data.draft_reply,
-          sessionId:  data.session_id || clientSid
-        });
-        showWaitingIndicator('Waiting for an agent to approve the reply…');
-      } else if (data.type === 'answer') {
-        // Direct KB answer (no approval gate)
-        appendBotMessage(data.reply);
-        setInputState(false);
-      } else if (data.type === 'escalation') {
-        // KB miss — unresolved ticket routed to the agent
-        sessionId = data.session_id || clientSid;
-        appendBotMessage(data.reply);
-        appendAgentTicket({
-          ticketId: data.ticket_id || sessionId,
-          customer: data.customer || 'Customer',
-          question: data.question || text
-        });
-        startPolling(sessionId);
-      } else {
-        showError('Received an unexpected response format.');
-        setInputState(false);
-      }
+      const data = await res.json();
+      const sid = data.session_id || sessionId;
+      appendBotMsg(data.reply);
+      showWaiting();
+      registerSession(sid, (answer) => {
+        removeWaiting(); appendCSMsg(answer); showSessionEnd();
+      });
+      // Leave input disabled — CS must respond to unlock
+
     } catch (err) {
-      clearTimeout(timeout);
-      removeTypingIndicator();
-      showError(err.name === 'AbortError'
-        ? 'Request timed out — please try again.'
-        : 'Something went wrong — please try again.');
+      clearTimeout(timeout); removeTyping();
+      showError(err.name === 'AbortError' ? 'Request timed out — please try again.' : 'Something went wrong — please try again.');
       setInputState(false);
     }
   }
 
-  sendBtn.addEventListener('click', sendMessage);
+  // ── CSV parser ───────────────────────────────────────────────────────────────
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    if (lines.length < 2) return [];
+    const headers = parseCSVRow(lines[0]);
+    return lines.slice(1).map(line => {
+      const values = parseCSVRow(line);
+      const obj = {};
+      headers.forEach((h, i) => { obj[h] = values[i] ?? ''; });
+      return obj;
+    });
+  }
 
+  function parseCSVRow(line) {
+    const result = []; let cur = ''; let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++; }
+      else if (ch === '"') { inQuotes = !inQuotes; }
+      else if (ch === ',' && !inQuotes) { result.push(cur); cur = ''; }
+      else { cur += ch; }
+    }
+    result.push(cur);
+    return result;
+  }
+
+  // ── CS Panel polling ──────────────────────────────────────────────────────────
+  let countdownSecs = 0;
+  let countdownTimer = null;
+
+  function startCountdown() {
+    clearInterval(countdownTimer);
+    countdownSecs = POLL_INTERVAL_MS / 1000;
+    countdownTimer = setInterval(() => {
+      countdownSecs--;
+      if (countdownSecs <= 0) { clearInterval(countdownTimer); return; }
+      const base = pollStatus.dataset.base || 'Auto-synced';
+      pollStatus.textContent = `${base} · refreshing in ${countdownSecs}s`;
+    }, 1000);
+  }
+
+  async function pollSheets() {
+    if (DEMO_MODE) return;
+    clearInterval(countdownTimer);
+    pollStatus.textContent = 'Syncing queue…';
+    try {
+      const res = await fetch(`${SHEETS_CSV_URL}&t=${Date.now()}`);
+      if (!res.ok) throw new Error('non-200');
+      const text = await res.text();
+      const rows = parseCSV(text);
+      const pending = rows.filter(r => r.status && r.status !== 'resolved');
+      const typing = ticketList.contains(document.activeElement) && document.activeElement.tagName === 'TEXTAREA';
+      if (!typing) renderTickets(pending);
+      const base = 'Queue synced ·' + formatTime(new Date());
+      pollStatus.dataset.base = base;
+      pollStatus.textContent = base;
+      startCountdown();
+    } catch {
+      pollStatus.textContent = 'Unable to reach sheet';
+    }
+  }
+
+  function startPolling() {
+    pollSheets();
+    setInterval(pollSheets, POLL_INTERVAL_MS);
+  }
+
+  fetchNowBtn.addEventListener('click', pollSheets);
+
+  function renderTickets(tickets) {
+    const pendingIds = new Set(
+      tickets
+        .filter(t => t.status !== 'resolved' && !resolvedSessions.has(t.session_id))
+        .map(t => t.session_id)
+    );
+
+    // Remove cards that are no longer pending — but only if they have no typed content and aren't active
+    ticketList.querySelectorAll('.ticket-card').forEach(card => {
+      const sid = card.dataset.sessionId;
+      const hasContent = card.querySelector('textarea') && card.querySelector('textarea').value.trim();
+      if (!pendingIds.has(sid) && !activeCards.has(sid) && !hasContent) {
+        card.remove();
+      }
+    });
+
+    // Add new cards that aren't already rendered
+    tickets.forEach(t => {
+      if (!pendingIds.has(t.session_id)) return;
+      if (!ticketList.querySelector(`[data-session-id="${t.session_id}"]`)) {
+        ticketList.appendChild(createTicketCard(t));
+      }
+    });
+
+    // Show empty state only if truly empty
+    ticketList.querySelectorAll('.empty-state').forEach(e => e.remove());
+    if (!ticketList.querySelector('.ticket-card')) {
+      const el = document.createElement('div');
+      el.className = 'empty-state'; el.textContent = 'No pending queries.';
+      ticketList.appendChild(el);
+    }
+  }
+
+  function addDemoTicket(ticket) {
+    const empties = ticketList.querySelectorAll('.empty-state');
+    empties.forEach(e => e.remove());
+    ticketList.prepend(createTicketCard(ticket));
+  }
+
+  function createTicketCard(ticket) {
+    const card = document.createElement('div'); card.className = 'ticket-card';
+    card.dataset.sessionId = ticket.session_id;
+
+    // Meta
+    const meta = document.createElement('div'); meta.className = 'ticket-meta';
+    const sid = document.createElement('span'); sid.className = 'ticket-session';
+    sid.textContent = ticket.session_id.slice(0, 12) + '…';
+    const time = document.createElement('span'); time.className = 'ticket-time';
+    time.textContent = formatTime(ticket.timestamp ? new Date(ticket.timestamp) : new Date());
+    meta.appendChild(sid); meta.appendChild(time); card.appendChild(meta);
+
+    // Question
+    const q = document.createElement('div'); q.className = 'ticket-question';
+    q.textContent = ticket.question; card.appendChild(q);
+
+    if (ticket.status === 'pending_approval' && ticket.draft_reply) {
+      appendDraftSection(card, ticket);
+    } else {
+      appendReplySection(card, ticket.session_id, ticket.question);
+    }
+    return card;
+  }
+
+  function appendDraftSection(card, ticket) {
+    const ds = document.createElement('div'); ds.className = 'ticket-draft-section';
+    const lbl = document.createElement('div'); lbl.className = 'ticket-draft-label'; lbl.textContent = 'Draft reply';
+    const txt = document.createElement('div'); txt.className = 'ticket-draft-text'; txt.textContent = ticket.draft_reply;
+    ds.appendChild(lbl); ds.appendChild(txt); card.appendChild(ds);
+
+    const actions = document.createElement('div'); actions.className = 'ticket-actions';
+
+    const btnApprove = document.createElement('button'); btnApprove.className = 'btn-approve'; btnApprove.textContent = 'Approve & Send';
+    const btnReject  = document.createElement('button'); btnReject.className  = 'btn-reject';  btnReject.textContent  = 'Reject';
+
+    btnApprove.onclick = async () => {
+      btnApprove.disabled = btnReject.disabled = true;
+      btnApprove.textContent = 'Sending…';
+      await csRespond(ticket.session_id, 'approve', ticket.draft_reply, card);
+    };
+
+    btnReject.onclick = async () => {
+      btnApprove.disabled = btnReject.disabled = true;
+      btnReject.textContent = 'Rejecting…';
+      const ok = await csRespond(ticket.session_id, 'reject', '', card);
+      if (ok) {
+        // Transform card to manual reply view
+        ds.remove(); actions.remove();
+        appendReplySection(card, ticket.session_id, ticket.question);
+      } else {
+        btnApprove.disabled = btnReject.disabled = false;
+        btnApprove.textContent = 'Approve & Send';
+        btnReject.textContent = 'Reject';
+      }
+    };
+
+    actions.appendChild(btnApprove); actions.appendChild(btnReject); card.appendChild(actions);
+  }
+
+  function appendReplySection(card, sessionId, question) {
+    const section = document.createElement('div'); section.className = 'ticket-reply-section';
+    const textarea = document.createElement('textarea'); textarea.className = 'ticket-reply-input';
+    textarea.placeholder = 'Type your reply…'; textarea.rows = 3;
+
+    const kbRow = document.createElement('label'); kbRow.className = 'ticket-kb-row';
+    const kbCheck = document.createElement('input'); kbCheck.type = 'checkbox'; kbCheck.className = 'ticket-kb-check';
+    const kbLbl = document.createElement('span'); kbLbl.textContent = 'Save to knowledge base';
+    kbRow.appendChild(kbCheck); kbRow.appendChild(kbLbl);
+
+    const btnSend = document.createElement('button'); btnSend.className = 'btn-send-reply'; btnSend.textContent = 'Send Reply';
+
+    btnSend.onclick = async () => {
+      const answer = textarea.value.trim();
+      if (!answer) return;
+      btnSend.disabled = true; btnSend.textContent = 'Sending…';
+      textarea.disabled = true;
+      const action = kbCheck.checked ? 'manual' : 'approve';
+      await csRespond(sessionId, action, answer, card, question);
+    };
+
+    section.appendChild(textarea); section.appendChild(kbRow); section.appendChild(btnSend); card.appendChild(section);
+  }
+
+  async function csRespond(sessionId, action, answer, card, question) {
+    try {
+      const payload = { session_id: sessionId, action, answer };
+      if (question) payload.question = question;
+      const res = await fetch(CS_RESPOND_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error('non-200');
+      const data = await res.json();
+
+      if (action !== 'reject') {
+        const finalAnswer = data.answer || answer;
+        deliverToGuest(sessionId, finalAnswer);
+        markTicketSent(card);
+      }
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function markTicketSent(card) {
+    const sessionId = card.dataset.sessionId;
+    if (sessionId) {
+      activeCards.add(sessionId);
+      resolvedSessions.add(sessionId);
+    }
+    card.dataset.active = 'true';
+    const children = [...card.children];
+    children.slice(2).forEach(c => c.remove()); // keep meta + question
+    const sent = document.createElement('div'); sent.className = 'ticket-sent';
+    const dot = document.createElement('div'); dot.className = 'ticket-sent-dot';
+    const lbl = document.createElement('span'); lbl.textContent = 'Reply sent';
+    sent.appendChild(dot); sent.appendChild(lbl); card.appendChild(sent);
+    setTimeout(() => { card.style.opacity = '0.5'; }, 1000);
+    setTimeout(() => { card.remove(); if (sessionId) activeCards.delete(sessionId); }, 4000);
+  }
+
+  // Demo: in demo mode csRespond is bypassed — deliver handled by button click
+  // We wrap csRespond to short-circuit in demo mode
+  const _csRespond = csRespond;
+  async function csRespondWrapped(sessionId, action, answer, card, question) {
+    if (DEMO_MODE) {
+      if (action !== 'reject') {
+        deliverToGuest(sessionId, answer);
+        markTicketSent(card);
+      }
+      return true;
+    }
+    return _csRespond(sessionId, action, answer, card, question);
+  }
+
+  // Patch the button handlers to use the wrapped version
+  // (they call csRespond directly — rebind)
+  window.csRespond = csRespondWrapped;
+
+  // ── Events ────────────────────────────────────────────────────────────────────
+  sendBtn.addEventListener('click', sendMessage);
   msgInput.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   });
-
   msgInput.addEventListener('input', () => {
     msgInput.style.height = 'auto';
-    msgInput.style.height = Math.min(msgInput.scrollHeight, 80) + 'px';
+    msgInput.style.height = Math.min(msgInput.scrollHeight, 76) + 'px';
   });
-
+  // ── Init ──────────────────────────────────────────────────────────────────────
   (function init() {
-    appendBotMessage("Hi! I'm BOLDR's AI support assistant. Ask me anything about BOLDR, or try a question about our features, pricing, or integrations.");
-    showAgentEmpty();
+    appendBotMsg("Hi! I'm BOLDR's AI support assistant. Ask me anything about BOLDR, or try a question about our features, pricing, or integrations.");
+    startPolling();
   })();
 </script>
 
