@@ -1,0 +1,78 @@
+{
+  "name": "BOLDR — 5. CS Answer Webhook",
+  "versionId": "a5000000-0000-4000-8000-000000000005",
+  "nodes": [
+    {
+      "id": "e1000001-0000-4000-8000-000000000005",
+      "name": "CS Answer",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [140, 300],
+      "webhookId": "e1000001-0000-4000-8000-000000000055",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "boldr-cs-answer",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "e1000002-0000-4000-8000-000000000005",
+      "name": "Update Sheet — Resolved",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [360, 300],
+      "parameters": {
+        "operation": "update",
+        "documentId": { "__rl": true, "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID", "mode": "id" },
+        "sheetName":  { "__rl": true, "value": "Sheet1", "mode": "name" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ticket_id": "={{ $json.body.ticket_id }}",
+            "cs_answer": "={{ $json.body.cs_answer }}",
+            "status":    "resolved"
+          },
+          "matchingColumns": ["ticket_id"],
+          "schema": []
+        },
+        "options": { "valueInputMode": "USER_ENTERED" }
+      },
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "id": "e1000003-0000-4000-8000-000000000005",
+      "name": "Respond — Done",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [580, 300],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"success\": true}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "CS Answer": {
+      "main": [[{ "node": "Update Sheet — Resolved", "type": "main", "index": 0 }]]
+    },
+    "Update Sheet — Resolved": {
+      "main": [[{ "node": "Respond — Done", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "tags": [{ "name": "BOLDR" }]
+}

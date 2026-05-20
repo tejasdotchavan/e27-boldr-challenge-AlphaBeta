@@ -590,42 +590,49 @@
       color: var(--text);
     }
 
-    .agent-commands {
+    .agent-actions {
       display: flex;
-      flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
 
-    .agent-commands.done .agent-cmd {
-      opacity: 0.35;
+    .agent-actions.done button {
+      opacity: 0.3;
       pointer-events: none;
     }
 
-    .agent-cmd-row {
+    .btn-approve, .btn-reject {
+      flex: 1;
+      font-family: var(--font);
       font-size: 13px;
-      color: var(--muted);
-    }
-
-    .agent-cmd {
-      font-family: monospace;
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--text);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 3px 7px;
-      text-decoration: none;
+      font-weight: 500;
+      padding: 9px 14px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: background 120ms, color 120ms;
+      border: 1px solid;
+      transition: background 120ms, color 120ms, opacity 120ms;
     }
 
-    .agent-cmd:hover {
+    .btn-approve {
       background: var(--text);
       color: var(--bg);
+      border-color: var(--text);
     }
 
-    .agent-cmd-desc { margin-left: 7px; }
+    .btn-approve:hover {
+      background: #333;
+      border-color: #333;
+    }
+
+    .btn-reject {
+      background: var(--bg);
+      color: var(--text);
+      border-color: var(--border);
+    }
+
+    .btn-reject:hover {
+      background: var(--surface);
+      border-color: var(--muted);
+    }
 
     .agent-note {
       font-size: 13px;
@@ -819,15 +826,17 @@
 
 <script>
   // ── Config — swap these out before deploying ────────────────────────────────
-  const N8N_WEBHOOK_URL = 'https://boldre27alphabeta.app.n8n.cloud/webhook/boldr-chat';
-  const N8N_POLL_URL    = 'https://boldre27alphabeta.app.n8n.cloud/webhook/boldr-poll';
-  const N8N_APPROVE_URL = 'https://boldre27alphabeta.app.n8n.cloud/webhook/boldr-approve';
-  const N8N_REJECT_URL  = 'https://boldre27alphabeta.app.n8n.cloud/webhook/boldr-reject';
+  const N8N_WEBHOOK_URL      = 'https://boldre27alphabeta.app.n8n.cloud/webhook/boldr-chat';
+  const N8N_APPROVE_URL      = 'https://boldre27alphabeta.app.n8n.cloud/webhook/boldr-approve';
+  const N8N_REJECT_URL       = 'https://boldre27alphabeta.app.n8n.cloud/webhook/boldr-reject';
+  // Deploy apps-script/boldr-sheets.gs as a Web App and paste the URL below:
+  const APPS_SCRIPT_POLL_URL = 'https://script.google.com/macros/s/AKfycbysVD-SmYpmJiaJXdWRzl57OGZUJBP19mW9JXEiJW_-3guSFxoMYdqRtqBONzbeC-Op/exec';
   // ───────────────────────────────────────────────────────────────────────────
 
-  const POLL_INTERVAL_MS  = 5000;
-  const POLL_MAX_ATTEMPTS = 60;
-  const SEND_TIMEOUT_MS   = 15000;
+  const POLL_INITIAL_MS = 5000;          // first poll after 5 s
+  const POLL_MAX_MS     = 30000;         // cap backoff at 30 s
+  const POLL_TIMEOUT_MS = 30 * 60 * 1000; // give up after 30 min
+  const SEND_TIMEOUT_MS = 15000;
 
   const chatMessages  = document.getElementById('chatMessages');
   const agentMessages = document.getElementById('agentMessages');
@@ -836,7 +845,9 @@
 
   let sessionId     = null;
   let pollTimer     = null;
-  let pollAttempts  = 0;
+  let pollStart     = null;
+  let pollDelay     = POLL_INITIAL_MS;
+  let demoPollCount = 0;
   let waitingEl     = null;
   let sessionEnded  = false;
   let awaitingReply = false;
@@ -997,15 +1008,6 @@
     return f;
   }
 
-  function commandLink(action, ticketId, desc) {
-    const row = el('div', 'agent-cmd-row');
-    const link = el('a', 'agent-cmd ' + action, '/' + action + ticketId);
-    link.href = '#';
-    row.appendChild(link);
-    row.appendChild(el('span', 'agent-cmd-desc', desc));
-    return { row, link };
-  }
-
   function appendAgentDraft(d) {
     agentClearEmpty();
     const msg = el('div', 'agent-msg');
@@ -1022,19 +1024,19 @@
     draft.appendChild(el('div', 'agent-draft-body', d.draftReply));
     msg.appendChild(draft);
 
-    const cmds = el('div', 'agent-commands');
-    const approve = commandLink('approve', d.ticketId, '— send to customer');
-    const reject  = commandLink('reject',  d.ticketId, '— log to CS queue');
-    cmds.appendChild(approve.row);
-    cmds.appendChild(reject.row);
-    msg.appendChild(cmds);
+    const actions    = el('div', 'agent-actions');
+    const approveBtn = el('button', 'btn-approve', '✓ Approve');
+    const rejectBtn  = el('button', 'btn-reject',  '✕ Reject');
+    actions.appendChild(approveBtn);
+    actions.appendChild(rejectBtn);
+    msg.appendChild(actions);
 
     msg.appendChild(agentFooter());
     agentMessages.appendChild(msg);
     agentScrollToBottom();
 
-    approve.link.addEventListener('click', e => { e.preventDefault(); handleApprove(d, cmds); });
-    reject.link.addEventListener('click',  e => { e.preventDefault(); handleReject(d, cmds); });
+    approveBtn.addEventListener('click', () => { actions.classList.add('done'); handleApprove(d, actions); });
+    rejectBtn.addEventListener('click',  () => { actions.classList.add('done'); handleReject(d, actions); });
   }
 
   function appendAgentTicket(d) {
@@ -1048,8 +1050,15 @@
     fields.appendChild(agentField('Question', d.question));
     msg.appendChild(fields);
 
-    msg.appendChild(el('div', 'agent-note',
-      'Fill in cs_answer in the Google Sheet and set status to answered.'));
+    const note = el('div', 'agent-note');
+    note.appendChild(document.createTextNode('In '));
+    const sheetLink = el('a', 'n8n-link', 'Google Sheets');
+    sheetLink.href = 'https://docs.google.com/spreadsheets/d/1SN1zze4dZ4f1vksNhRMA3NQVbsDkKE2qR1A6fedMVLI/edit?gid=0#gid=0';
+    sheetLink.target = '_blank';
+    sheetLink.rel = 'noopener';
+    note.appendChild(sheetLink);
+    note.appendChild(document.createTextNode(': fill in cs_answer, set status to "Ready to Send", then click BOLDR → Send Answers.'));
+    msg.appendChild(note);
     msg.appendChild(agentFooter());
     agentMessages.appendChild(msg);
     agentScrollToBottom();
@@ -1071,10 +1080,11 @@
     setInputState(false);
   }
 
-  async function handleApprove(d, cmds) {
-    cmds.classList.add('done');
+  async function handleApprove(d, actions) {
+    actions.classList.add('done');
     if (DEMO_MODE) {
       deliverApprovedReply(d.draftReply);
+      showSessionEnd();
       appendAgentAck('✅ Reply approved and delivered to the customer. Ticket ' + d.ticketId + ' closed.');
       return;
     }
@@ -1085,22 +1095,23 @@
       let reply = d.draftReply;
       try { const j = await res.json(); if (j && j.reply) reply = j.reply; } catch { /* keep draft */ }
       deliverApprovedReply(reply);
+      showSessionEnd();
       appendAgentAck('✅ Reply approved and delivered to the customer. Ticket ' + d.ticketId + ' closed.');
     } catch {
-      cmds.classList.remove('done');
+      actions.classList.remove('done');
       appendAgentAck("⚠️ Couldn't reach n8n — the approval didn't go through. Please try again.");
     }
   }
 
-  async function handleReject(d, cmds) {
-    cmds.classList.add('done');
+  async function handleReject(d, actions) {
+    actions.classList.add('done');
     if (!DEMO_MODE) {
       try {
         const res = await fetch(
           `${N8N_REJECT_URL}?id=${encodeURIComponent(d.ticketId)}&session_id=${encodeURIComponent(d.sessionId)}`);
         if (!res.ok) throw new Error('bad status');
       } catch {
-        cmds.classList.remove('done');
+        actions.classList.remove('done');
         appendAgentAck("⚠️ Couldn't reach n8n — the rejection didn't go through. Please try again.");
         return;
       }
@@ -1113,40 +1124,50 @@
   }
 
   // ── Polling (KB miss + post-reject CS flow) ────────────────────────────────
+  // Uses exponential backoff: 5 s → 10 s → 20 s → 30 s (cap), zero n8n executions.
   async function pollForAnswer(sid) {
-    pollAttempts++;
-    if (pollAttempts > POLL_MAX_ATTEMPTS) {
-      clearInterval(pollTimer);
+    if (DEMO_MODE) {
+      demoPollCount++;
+      if (demoPollCount >= 2) {
+        removeWaitingIndicator();
+        appendCSMessage(DEMO_SCRIPT.resolved.reply);
+        showSessionEnd();
+      } else {
+        pollDelay = Math.min(pollDelay * 2, POLL_MAX_MS);
+        pollTimer = setTimeout(() => pollForAnswer(sid), pollDelay);
+      }
+      return;
+    }
+
+    if (Date.now() - pollStart > POLL_TIMEOUT_MS) {
       removeWaitingIndicator();
       showError('Our team has your question and will be in touch via email.');
       return;
     }
-    if (DEMO_MODE) {
-      if (pollAttempts >= 2) {
-        clearInterval(pollTimer);
-        removeWaitingIndicator();
-        appendCSMessage(DEMO_SCRIPT.resolved.reply);
-        showSessionEnd();
-      }
-      return;
-    }
+
     try {
-      const res = await fetch(`${N8N_POLL_URL}?session_id=${encodeURIComponent(sid)}`);
-      if (!res.ok) return;
-      const data = await res.json();
-      if (data.status === 'resolved') {
-        clearInterval(pollTimer);
-        removeWaitingIndicator();
-        appendCSMessage(data.reply);
-        showSessionEnd();
+      const res = await fetch(`${APPS_SCRIPT_POLL_URL}?session_id=${encodeURIComponent(sid)}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.status === 'resolved') {
+          removeWaitingIndicator();
+          appendCSMessage(data.reply);
+          showSessionEnd();
+          return;
+        }
       }
-    } catch { /* keep polling */ }
+    } catch { /* keep trying */ }
+
+    pollDelay = Math.min(pollDelay * 2, POLL_MAX_MS);
+    pollTimer = setTimeout(() => pollForAnswer(sid), pollDelay);
   }
 
   function startPolling(sid) {
-    pollAttempts = 0;
+    pollStart     = Date.now();
+    pollDelay     = POLL_INITIAL_MS;
+    demoPollCount = 0;
     showWaitingIndicator('Waiting for your CS agent…');
-    pollTimer = setInterval(() => pollForAnswer(sid), POLL_INTERVAL_MS);
+    pollTimer = setTimeout(() => pollForAnswer(sid), pollDelay);
   }
 
   // ── Send ───────────────────────────────────────────────────────────────────
